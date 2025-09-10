@@ -68,7 +68,9 @@ namespace IssueReportSystem
         private void button4_Click(object sender, EventArgs e)
         {
             ViewReportsForm viewReportsForm = new ViewReportsForm();
-            viewReportsForm.ShowDialog();
+            this.Hide(); // hide MainMenu
+            viewReportsForm.ShowDialog(); // open ViewReportsForm as a modal dialog
+            this.Show(); // when ViewReportsForm closes, show MainMenu again
         }
     }
 }

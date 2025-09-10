@@ -45,7 +45,7 @@
             this.Title.AutoSize = true;
             this.tableLayoutPanel1.SetColumnSpan(this.Title, 2);
             this.Title.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Title.Font = new System.Drawing.Font("Segoe UI", 12.75F);
+            this.Title.Font = new System.Drawing.Font("Segoe UI", 12.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Title.Location = new System.Drawing.Point(3, 398);
             this.Title.Name = "Title";
             this.Title.Size = new System.Drawing.Size(398, 31);

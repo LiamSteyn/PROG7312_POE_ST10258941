@@ -194,6 +194,16 @@ namespace IssueReportSystem
                 {
                     attachedFilePaths.AddRange(dialog.FileNames);
 
+                    // Update button text to show number of attached files
+                    if (attachedFilePaths.Count == 1)
+                        attachButton.Text = "1 file attached";
+                    else
+                        attachButton.Text = $"{attachedFilePaths.Count} files attached";
+
+                    // Optional: change button color to indicate files are attached
+                    attachButton.BackColor = Color.LightGreen;
+
+                    // Optionally, still show a message box if you want
                     string files = string.Join(Environment.NewLine, dialog.FileNames);
                     MessageBox.Show($"Files attached:\n{files}", "Attachments", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }

@@ -30,7 +30,6 @@
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.IssueTitle = new System.Windows.Forms.Label();
-            this.submitButton = new System.Windows.Forms.Button();
             this.issueDescription = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.issueLocation = new System.Windows.Forms.TextBox();
@@ -41,6 +40,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.provinceDropdown = new System.Windows.Forms.ComboBox();
+            this.submitButton = new System.Windows.Forms.Button();
             this.homeButton = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -60,10 +60,10 @@
             this.tableLayoutPanel1.Controls.Add(this.attachButton, 0, 8);
             this.tableLayoutPanel1.Controls.Add(this.progressBarReport, 0, 10);
             this.tableLayoutPanel1.Controls.Add(this.label3, 0, 9);
-            this.tableLayoutPanel1.Controls.Add(this.label2, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.label4, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.provinceDropdown, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.homeButton, 2, 0);
+            this.tableLayoutPanel1.Controls.Add(this.label2, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.label4, 0, 3);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -96,22 +96,8 @@
             this.IssueTitle.Size = new System.Drawing.Size(454, 75);
             this.IssueTitle.TabIndex = 3;
             this.IssueTitle.Text = "Report an Issue";
-            this.IssueTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.IssueTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.IssueTitle.Click += new System.EventHandler(this.Title_Click);
-            // 
-            // submitButton
-            // 
-            this.tableLayoutPanel1.SetColumnSpan(this.submitButton, 3);
-            this.submitButton.Dock = System.Windows.Forms.DockStyle.Top;
-            this.submitButton.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.submitButton.Location = new System.Drawing.Point(6, 537);
-            this.submitButton.Margin = new System.Windows.Forms.Padding(6);
-            this.submitButton.Name = "submitButton";
-            this.submitButton.Size = new System.Drawing.Size(564, 29);
-            this.submitButton.TabIndex = 4;
-            this.submitButton.Text = "Submit Issue";
-            this.submitButton.UseVisualStyleBackColor = true;
-            this.submitButton.Click += new System.EventHandler(this.submitButton_Click);
             // 
             // issueDescription
             // 
@@ -253,7 +239,8 @@
             this.label4.Font = new System.Drawing.Font("Segoe UI", 8.75F);
             this.label4.Location = new System.Drawing.Point(3, 140);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(52, 15);
+            this.label4.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
+            this.label4.Size = new System.Drawing.Size(58, 15);
             this.label4.TabIndex = 15;
             this.label4.Text = "Address:";
             this.label4.Click += new System.EventHandler(this.label4_Click);
@@ -269,6 +256,23 @@
             this.provinceDropdown.Size = new System.Drawing.Size(121, 21);
             this.provinceDropdown.TabIndex = 16;
             this.provinceDropdown.SelectedIndexChanged += new System.EventHandler(this.provinceDropdown_SelectedIndexChanged);
+            // 
+            // submitButton
+            // 
+            this.tableLayoutPanel1.SetColumnSpan(this.submitButton, 3);
+            this.submitButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.submitButton.Font = new System.Drawing.Font("Segoe UI", 8F);
+            this.submitButton.Image = global::IssueReportSystem.Properties.Resources.icons8_send_32;
+            this.submitButton.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.submitButton.Location = new System.Drawing.Point(6, 537);
+            this.submitButton.Margin = new System.Windows.Forms.Padding(6);
+            this.submitButton.Name = "submitButton";
+            this.submitButton.Size = new System.Drawing.Size(564, 52);
+            this.submitButton.TabIndex = 4;
+            this.submitButton.Text = "Submit Issue";
+            this.submitButton.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.submitButton.UseVisualStyleBackColor = true;
+            this.submitButton.Click += new System.EventHandler(this.submitButton_Click);
             // 
             // homeButton
             // 
