@@ -11,11 +11,11 @@ The system demonstrates the use of **advanced C# data structures** (Linked Lists
 -  **Report an Issue** – Log issues with details such as location, description, province, and category.  
 -  **File Attachments** – Attach images or documents as supporting evidence.  
 -  **Progress Bar** – Visual progress indicator when filling out issue forms.  
-- 🗂 **Multi-level Report Storage** – Organized by **Province → Category → Reports**.  
+-  **Multi-level Report Storage** – Organized by **Province → Category → Reports**.  
 
 ---
 
-## 🛠 Technologies Used
+##  Technologies Used
 - **Language:** C#  
 - **Framework:** .NET (Windows Forms)  
 - **IDE:** Visual Studio  
