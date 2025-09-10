@@ -140,6 +140,10 @@ namespace IssueReportSystem
             categoryDropdown.SelectedIndex = 0;
             provinceDropdown.SelectedIndex = 0;
             attachedFilePaths.Clear();
+
+            // Reset attach button to default
+            attachButton.Text = "Attach Files";
+            attachButton.BackColor = SystemColors.Control;
         }
 
         private void issueLocation_Enter(object sender, EventArgs e)
@@ -200,10 +204,10 @@ namespace IssueReportSystem
                     else
                         attachButton.Text = $"{attachedFilePaths.Count} files attached";
 
-                    // Optional: change button color to indicate files are attached
+                    
                     attachButton.BackColor = Color.LightGreen;
 
-                    // Optionally, still show a message box if you want
+                   
                     string files = string.Join(Environment.NewLine, dialog.FileNames);
                     MessageBox.Show($"Files attached:\n{files}", "Attachments", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
