@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using IssueReportSystem.Models;
@@ -41,6 +42,8 @@ namespace IssueReportSystem
             // Attach Load event handler
             Load += LocalEventsForm_Load;
         }
+
+
 
         // Form load event handler
         private void LocalEventsForm_Load(object sender, EventArgs e)
@@ -196,6 +199,8 @@ namespace IssueReportSystem
             }
         }
 
+
+
         // Updates suggested events based on user interactions
         private void UpdateSuggestionsFromInteraction(string category)
         {
@@ -331,8 +336,28 @@ namespace IssueReportSystem
             }
         }
 
+        private void txtSearch_Enter(object sender, EventArgs e)
+        {
+            if (txtSearch.Text == "Search by title/location/category...")
+            {
+                txtSearch.Text = "";
+                txtSearch.ForeColor = Color.Black;
+            }
+        }
 
-        private void LocalEventsForm_Load_1(object sender, EventArgs e){}
+        private void txtSearch_Leave(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtSearch.Text))
+            {
+                txtSearch.Text = "Search by title/location/category...";
+                txtSearch.ForeColor = Color.Gray;
+            }
+        }
+
+
+        private void LocalEventsForm_Load_1(object sender, EventArgs e)
+        {
+        }
 
         private void lblAnnouncements_Click(object sender, EventArgs e){}
     }
