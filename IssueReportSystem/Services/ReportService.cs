@@ -68,19 +68,26 @@ namespace IssueReportSystem.Services
         }
 
 
-        //Get all the reports
+        /// <summary>
+        /// Returns all reports in the order they were added.
+        /// </summary>
         public static LinkedList<Report> GetReports()
         {
             return reports;
         }
 
-        // Get FIFO queue of pending reports
+        /// <summary>
+        /// Returns a FIFO queue of reports with "Pending" status.
+        /// </summary>
         public static Queue<Report> GetPendingQueue()
         {
             return new Queue<Report>(pendingQueue);
         }
 
-        // Get reports by Province & Category
+        /// <summary>
+        /// Returns all reports for a specific province and category.
+        /// If none exist, returns an empty linked list.
+        /// </summary>
         public static LinkedList<Report> GetReportsByProvinceAndCategory(string province, string category)
         {
             if (reportsByProvinceAndCategory.ContainsKey(province) &&
@@ -91,22 +98,61 @@ namespace IssueReportSystem.Services
             return new LinkedList<Report>();
         }
 
-        // Add to "recently viewed reports" stack
+        /// <summary>
+        /// Adds a report to the "recently viewed" stack.
+        /// Useful for showing last viewed reports (LIFO).
+        /// </summary>
         public static void AddRecentReport(Report report)
         {
             recentReports.Push(report);
         }
 
-        // Get last viewed report (LIFO)
+        /// <summary>
+        /// Returns the last viewed report (LIFO) or null if none exist.
+        /// </summary>
         public static Report GetLastViewedReport()
         {
             return recentReports.Count > 0 ? recentReports.Pop() : null;
         }
 
-        // Expose the whole province/category dictionary
+        /// <summary>
+        /// Exposes the full dictionary of reports organized by province and category.
+        /// Useful for populating filters dynamically.
+        /// </summary>
         public static Dictionary<string, Dictionary<string, LinkedList<Report>>> ReportsByProvinceAndCategoryDict
         {
             get { return reportsByProvinceAndCategory; }
         }
+
+        /// <summary>
+        /// Seeds initial reports into the system for demonstration purposes.
+        /// Only runs if no reports exist yet to avoid duplicates.
+        /// </summary>
+        public static void SeedReports()
+        {
+            if (reports.Count > 0) return; // don't seed again if reports exist
+
+            var seededReports = new List<Report>
+            {
+                new Report { Province = "Western Cape", Category = "Road Damage", Location = "Gugulethu", Description = "Potholes on Main Street need urgent repair.", Status = "Pending" },
+                new Report { Province = "Western Cape", Category = "Plumbing", Location = "Claremont", Description = "Broken water pipe causing flooding near the library.", Status = "In Progress" },
+                new Report { Province = "Gauteng", Category = "Electrical", Location = "Soweto", Description = "Street lights not working along 5th Avenue.", Status = "Pending" },
+                new Report { Province = "KwaZulu-Natal", Category = "Other", Location = "Durban Central", Description = "Graffiti on public property needs cleanup.", Status = "Resolved" },
+                new Report { Province = "Eastern Cape", Category = "Road Damage", Location = "Port Elizabeth", Description = "Traffic signals malfunctioning at 3rd Street intersection.", Status = "Pending" },
+                new Report { Province = "Western Cape", Category = "Electrical", Location = "Woodstock", Description = "Power outage affecting multiple homes.", Status = "In Progress" },
+                new Report { Province = "Gauteng", Category = "Plumbing", Location = "Midrand", Description = "Leaking municipal water main in residential area.", Status = "Pending" },
+                new Report { Province = "Limpopo", Category = "Road Damage", Location = "Polokwane", Description = "Road shoulder collapsed near highway exit.", Status = "Pending" },
+                new Report { Province = "Western Cape", Category = "Other", Location = "Sea Point", Description = "Abandoned vehicle blocking parking bays.", Status = "Resolved" },
+                new Report { Province = "KwaZulu-Natal", Category = "Plumbing", Location = "Pietermaritzburg", Description = "Water supply issue in residential block.", Status = "Pending" }
+            };
+
+            // Add seeded reports to all relevant data structures
+            foreach (var r in seededReports)
+            {
+                AddReport(r);
+            }
+        }
+
+
     }
 }

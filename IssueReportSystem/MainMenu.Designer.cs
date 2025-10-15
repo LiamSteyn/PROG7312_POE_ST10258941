@@ -60,7 +60,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Controls.Add(this.label1, 0, 2);
-            this.tableLayoutPanel1.Controls.Add(this.button1, 1, 6);
+            this.tableLayoutPanel1.Controls.Add(this.button1, 1, 4);
             this.tableLayoutPanel1.Controls.Add(this.button3, 0, 6);
             this.tableLayoutPanel1.Controls.Add(this.button2, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.Title, 0, 5);
@@ -100,12 +100,12 @@
             this.button1.AutoSize = true;
             this.button1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.button1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Image = global::IssueReportSystem.Properties.Resources.icons8_coming_soon_32;
+            this.button1.Image = global::IssueReportSystem.Properties.Resources._event;
             this.button1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button1.Location = new System.Drawing.Point(227, 439);
+            this.button1.Location = new System.Drawing.Point(227, 335);
             this.button1.Margin = new System.Windows.Forms.Padding(25, 10, 25, 10);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(152, 63);
+            this.button1.Size = new System.Drawing.Size(152, 53);
             this.button1.TabIndex = 6;
             this.button1.Text = "Local Events and Annoncements";
             this.button1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -115,6 +115,7 @@
             // button3
             // 
             this.button3.AutoSize = true;
+            this.tableLayoutPanel1.SetColumnSpan(this.button3, 2);
             this.button3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.button3.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button3.Image = global::IssueReportSystem.Properties.Resources.icons8_coming_soon_32;
@@ -122,10 +123,9 @@
             this.button3.Location = new System.Drawing.Point(25, 439);
             this.button3.Margin = new System.Windows.Forms.Padding(25, 10, 25, 10);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(152, 63);
+            this.button3.Size = new System.Drawing.Size(354, 63);
             this.button3.TabIndex = 5;
             this.button3.Text = "Service\r\nRequest Status";
-            this.button3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
