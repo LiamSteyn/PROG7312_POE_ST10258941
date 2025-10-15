@@ -55,7 +55,8 @@ The application does **not use arrays or simple lists** for report management. I
 - `SortedDictionary<int, EventModel>` → Stores all events with unique IDs  
 - `List<EventModel>` → Stores suggested events for user interaction  
 - `Queue<EventModel>` → Maintains history of displayed suggestions  
-- `Dictionary<string, int>` → Tracks category search frequency for generating recommendations  
+- `Dictionary<string, int>` → Tracks category search frequency for generating recommendations
+- `HashSet<string>` → Currently reserved for future use. Could track unique event categories or tags to improve recommendation logic, prevent duplicates in suggestions, or enhance filtering, but is not actively used in the algorithm yet. 
 
 ---
 
