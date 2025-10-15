@@ -63,4 +63,7 @@ The application does **not use arrays or simple lists** for report management. I
 ## Author
 Developed by **Liam Coetzee**  
 Student Number: **ST10258941**  
-YouTube Link: [https://www.youtube.com/watch?v=ibJt_bwFM4w](https://www.youtube.com/watch?v=ibJt_bwFM4w)
+YouTube Links: 
+Part 1 Video [https://www.youtube.com/watch?v=ibJt_bwFM4w](https://www.youtube.com/watch?v=ibJt_bwFM4w)
+Part 2 Video [https://www.youtube.com/watch?v=50wSKVSx1PI](https://www.youtube.com/watch?v=5owSKVSx1PI)
+
