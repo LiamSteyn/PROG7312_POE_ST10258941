@@ -57,7 +57,7 @@
             this.dgvEvents.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.96629F));
             this.dgvEvents.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30.89888F));
             this.dgvEvents.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 52.13483F));
-            this.dgvEvents.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 373F));
+            this.dgvEvents.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 375F));
             this.dgvEvents.Controls.Add(this.label1, 1, 0);
             this.dgvEvents.Controls.Add(this.pictureBox1, 0, 0);
             this.dgvEvents.Controls.Add(this.dataEvents, 1, 4);
@@ -95,7 +95,7 @@
             this.label1.Font = new System.Drawing.Font("Segoe UI", 14.75F, System.Drawing.FontStyle.Bold);
             this.label1.Location = new System.Drawing.Point(151, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(720, 101);
+            this.label1.Size = new System.Drawing.Size(719, 101);
             this.label1.TabIndex = 9;
             this.label1.Text = "Local Community Events";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -132,7 +132,7 @@
             this.dataSuggested.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
             this.dataSuggested.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
             this.dataSuggested.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataSuggested.Location = new System.Drawing.Point(877, 189);
+            this.dataSuggested.Location = new System.Drawing.Point(876, 189);
             this.dataSuggested.Name = "dataSuggested";
             this.dataSuggested.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
             this.dataSuggested.Size = new System.Drawing.Size(358, 130);
@@ -186,7 +186,7 @@
             this.label4.Margin = new System.Windows.Forms.Padding(0, 6, 6, 0);
             this.label4.Name = "label4";
             this.label4.Padding = new System.Windows.Forms.Padding(2, 2, 2, 0);
-            this.label4.Size = new System.Drawing.Size(450, 39);
+            this.label4.Size = new System.Drawing.Size(449, 39);
             this.label4.TabIndex = 17;
             this.label4.Text = "Filter by:";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -198,11 +198,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe UI", 10.75F);
-            this.label2.Location = new System.Drawing.Point(914, 115);
+            this.label2.Location = new System.Drawing.Point(913, 115);
             this.label2.Margin = new System.Windows.Forms.Padding(40, 6, 6, 0);
             this.label2.Name = "label2";
             this.label2.Padding = new System.Windows.Forms.Padding(2, 2, 2, 0);
-            this.label2.Size = new System.Drawing.Size(329, 39);
+            this.label2.Size = new System.Drawing.Size(330, 39);
             this.label2.TabIndex = 14;
             this.label2.Text = "Recommended for You";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -212,7 +212,7 @@
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Segoe UI", 8.75F);
             this.label5.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.label5.Location = new System.Drawing.Point(914, 154);
+            this.label5.Location = new System.Drawing.Point(913, 154);
             this.label5.Margin = new System.Windows.Forms.Padding(40, 0, 3, 0);
             this.label5.Name = "label5";
             this.label5.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);

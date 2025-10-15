@@ -10,6 +10,9 @@ namespace IssueReportSystem
 {
     public partial class LocalEventsForm : Form
     {
+        // Tracks all unique categories (for reference, not for algorithm)
+        private HashSet<string> allUniqueCategories = new HashSet<string>();
+
         // Stores all events in a sorted dictionary keyed by event ID
         private SortedDictionary<int, EventModel> allEvents = new SortedDictionary<int, EventModel>();
 
@@ -44,7 +47,6 @@ namespace IssueReportSystem
         }
 
 
-
         // Form load event handler
         private void LocalEventsForm_Load(object sender, EventArgs e)
         {
@@ -74,6 +76,10 @@ namespace IssueReportSystem
                 { 21, new EventModel { Id = 21, Title = "Youth Leadership Seminar", Category = "Education", Location = "Mowbray", Date = DateTime.Now.AddDays(21), Description = "A seminar designed to inspire young people, develop leadership skills, and encourage active participation in community projects." } },
                 { 22, new EventModel { Id = 22, Title = "Community Sports Day", Category = "Community", Location = "Athlone Stadium", Date = DateTime.Now.AddDays(22), Description = "Enjoy a day of sports and recreational activities for all ages, fostering teamwork, fitness, and community spirit." } }
             };
+
+            // Populate the HashSet with all unique categories
+            allUniqueCategories = new HashSet<string>(allEvents.Values.Select(ev => ev.Category.ToLower()));
+
 
             // Configure main events DataGridView
             dataEvents.AutoGenerateColumns = false;
@@ -313,8 +319,14 @@ namespace IssueReportSystem
         private void ShowEventDetails(EventModel ev)
         {
             var detailsForm = new EventDetailsForm(ev.Title, ev.Category, ev.Location, ev.Date, ev.Description);
-            detailsForm.ShowDialog();
+            detailsForm.ShowDialog(); // Waits until the form is closed
+
+            // Clear the search after closing the details
+            txtSearch.Text = "";
+            // Reset the main DataGridView to show all events
+            dataEvents.DataSource = allEvents.Values.ToList();
         }
+
 
         // Clears cached suggestion data
         public static void ClearSuggestionCache()
@@ -359,6 +371,6 @@ namespace IssueReportSystem
         {
         }
 
-        private void lblAnnouncements_Click(object sender, EventArgs e){}
+        private void lblAnnouncements_Click(object sender, EventArgs e) { }
     }
 }
