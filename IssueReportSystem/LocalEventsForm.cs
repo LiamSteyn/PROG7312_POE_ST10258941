@@ -325,6 +325,8 @@ namespace IssueReportSystem
             txtSearch.Text = "";
             // Reset the main DataGridView to show all events
             dataEvents.DataSource = allEvents.Values.ToList();
+
+            UpdateSuggestionsFromInteraction(ev.Category);
         }
 
 
