@@ -12,6 +12,11 @@ namespace IssueReportSystem.Models
     public class Report
     {
         /// <summary>
+        /// Gets or sets a unique identifier for the report.
+        /// </summary>
+        public string UserId { get; set; }
+
+        /// <summary>
         /// Gets or sets the location/address where the issue was observed.
         /// </summary>
         public string Location { get; set; }

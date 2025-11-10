@@ -90,6 +90,12 @@ namespace IssueReportSystem
         /// </summary>
         private void submitButton_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(userIdTextBox.Text))
+            {
+                MessageBox.Show("Please enter your Custom Report ID.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             // Validate required fields
             if (string.IsNullOrWhiteSpace(issueLocation.Text) || issueLocation.Text == "Report Address...")
             {
@@ -114,6 +120,7 @@ namespace IssueReportSystem
             string description = issueDescription.Text.Trim();
             string category = categoryDropdown.SelectedItem?.ToString();
             string province = provinceDropdown.SelectedItem?.ToString();
+            string userId = userIdTextBox.Text.Trim();
 
 
             // Create report object
@@ -123,7 +130,8 @@ namespace IssueReportSystem
                 Description = description,
                 Category = category,
                 Province = province,
-                AttachmentPaths = new List<string>(attachedFilePaths)
+                AttachmentPaths = new List<string>(attachedFilePaths),
+                UserId = userId
             };
 
             // Add report to service
@@ -139,6 +147,7 @@ namespace IssueReportSystem
             issueDescription.ForeColor = Color.Gray;
             categoryDropdown.SelectedIndex = 0;
             provinceDropdown.SelectedIndex = 0;
+            userIdTextBox.Clear();
             attachedFilePaths.Clear();
 
             // Reset attach button to default
@@ -314,5 +323,9 @@ namespace IssueReportSystem
 
         }
 
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

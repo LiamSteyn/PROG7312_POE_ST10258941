@@ -57,7 +57,7 @@
             this.dgvEvents.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.96629F));
             this.dgvEvents.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30.89888F));
             this.dgvEvents.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 52.13483F));
-            this.dgvEvents.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 375F));
+            this.dgvEvents.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 376F));
             this.dgvEvents.Controls.Add(this.label1, 1, 0);
             this.dgvEvents.Controls.Add(this.pictureBox1, 0, 0);
             this.dgvEvents.Controls.Add(this.dataEvents, 1, 4);
@@ -95,7 +95,7 @@
             this.label1.Font = new System.Drawing.Font("Segoe UI", 14.75F, System.Drawing.FontStyle.Bold);
             this.label1.Location = new System.Drawing.Point(151, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(719, 101);
+            this.label1.Size = new System.Drawing.Size(718, 101);
             this.label1.TabIndex = 9;
             this.label1.Text = "Local Community Events";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -132,7 +132,7 @@
             this.dataSuggested.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
             this.dataSuggested.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
             this.dataSuggested.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataSuggested.Location = new System.Drawing.Point(876, 189);
+            this.dataSuggested.Location = new System.Drawing.Point(875, 189);
             this.dataSuggested.Name = "dataSuggested";
             this.dataSuggested.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
             this.dataSuggested.Size = new System.Drawing.Size(358, 130);
@@ -146,7 +146,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtSearch.Location = new System.Drawing.Point(151, 157);
             this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(264, 20);
+            this.txtSearch.Size = new System.Drawing.Size(263, 20);
             this.txtSearch.TabIndex = 15;
             this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
             // 
@@ -161,7 +161,7 @@
             this.label3.Margin = new System.Windows.Forms.Padding(0, 6, 6, 0);
             this.label3.Name = "label3";
             this.label3.Padding = new System.Windows.Forms.Padding(2, 2, 2, 0);
-            this.label3.Size = new System.Drawing.Size(264, 39);
+            this.label3.Size = new System.Drawing.Size(263, 39);
             this.label3.TabIndex = 15;
             this.label3.Text = "Search Events";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -169,7 +169,7 @@
             // cmbSort
             // 
             this.cmbSort.FormattingEnabled = true;
-            this.cmbSort.Location = new System.Drawing.Point(421, 157);
+            this.cmbSort.Location = new System.Drawing.Point(420, 157);
             this.cmbSort.Name = "cmbSort";
             this.cmbSort.Size = new System.Drawing.Size(88, 21);
             this.cmbSort.TabIndex = 16;
@@ -182,7 +182,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Segoe UI", 10.75F);
-            this.label4.Location = new System.Drawing.Point(418, 115);
+            this.label4.Location = new System.Drawing.Point(417, 115);
             this.label4.Margin = new System.Windows.Forms.Padding(0, 6, 6, 0);
             this.label4.Name = "label4";
             this.label4.Padding = new System.Windows.Forms.Padding(2, 2, 2, 0);
@@ -198,11 +198,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe UI", 10.75F);
-            this.label2.Location = new System.Drawing.Point(913, 115);
+            this.label2.Location = new System.Drawing.Point(912, 115);
             this.label2.Margin = new System.Windows.Forms.Padding(40, 6, 6, 0);
             this.label2.Name = "label2";
             this.label2.Padding = new System.Windows.Forms.Padding(2, 2, 2, 0);
-            this.label2.Size = new System.Drawing.Size(330, 39);
+            this.label2.Size = new System.Drawing.Size(331, 39);
             this.label2.TabIndex = 14;
             this.label2.Text = "Recommended for You";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -212,7 +212,7 @@
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Segoe UI", 8.75F);
             this.label5.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.label5.Location = new System.Drawing.Point(913, 154);
+            this.label5.Location = new System.Drawing.Point(912, 154);
             this.label5.Margin = new System.Windows.Forms.Padding(40, 0, 3, 0);
             this.label5.Name = "label5";
             this.label5.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
@@ -226,7 +226,7 @@
             this.homeButton.Font = new System.Drawing.Font("Segoe UI", 8.25F);
             this.homeButton.Image = global::IssueReportSystem.Properties.Resources.icons8_home_32;
             this.homeButton.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.homeButton.Location = new System.Drawing.Point(1036, 25);
+            this.homeButton.Location = new System.Drawing.Point(1035, 25);
             this.homeButton.Name = "homeButton";
             this.homeButton.Size = new System.Drawing.Size(50, 50);
             this.homeButton.TabIndex = 19;

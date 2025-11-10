@@ -29,6 +29,10 @@ namespace IssueReportSystem.Services
         // HashSet to prevent duplicates (based on unique key: Location+Description)
         private static HashSet<string> reportKeys = new HashSet<string>();
 
+        // Key: User ID (string), Value: List of Reports submitted by that user
+        private static Dictionary<string, List<Report>> reportsByUserId
+            = new Dictionary<string, List<Report>>();
+
         /// <summary>
         /// Adds a new report to all relevant data structures.
         /// </summary>
@@ -41,6 +45,21 @@ namespace IssueReportSystem.Services
             {
                 throw new InvalidOperationException("This report already exists (duplicate submission).");
             }
+
+            string userId = report.UserId;
+
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                userId = "UNKNOWN_USER"; // Assign a default key to prevent crash
+            }
+
+            if (!reportsByUserId.ContainsKey(userId))
+            {
+                // If not, create a new list for that user
+                reportsByUserId[userId] = new List<Report>();
+            }
+
+            reportsByUserId[userId].Add(report);
 
             reportKeys.Add(key);
 
@@ -125,6 +144,21 @@ namespace IssueReportSystem.Services
         }
 
         /// <summary>
+        /// Returns all reports submitted by a specific user ID.
+        /// </summary>
+        /// <param name="userId">The unique identifier for the user.</param>
+        /// <returns>A list of reports, or an empty list if the user has no reports.</returns>
+        public static List<Report> GetReportsByUserId(string userId)
+        {
+            // O(1) average time complexity for lookup!
+            if (reportsByUserId.ContainsKey(userId))
+            {
+                return reportsByUserId[userId];
+            }
+            return new List<Report>();
+        }
+
+        /// <summary>
         /// Seeds initial reports into the system for demonstration purposes.
         /// Only runs if no reports exist yet to avoid duplicates.
         /// </summary>
@@ -134,16 +168,16 @@ namespace IssueReportSystem.Services
 
             var seededReports = new List<Report>
             {
-                new Report { Province = "Western Cape", Category = "Road Damage", Location = "Gugulethu", Description = "Potholes on Main Street need urgent repair.", Status = "Pending" },
-                new Report { Province = "Western Cape", Category = "Plumbing", Location = "Claremont", Description = "Broken water pipe causing flooding near the library.", Status = "In Progress" },
-                new Report { Province = "Gauteng", Category = "Electrical", Location = "Soweto", Description = "Street lights not working along 5th Avenue.", Status = "Pending" },
-                new Report { Province = "KwaZulu-Natal", Category = "Other", Location = "Durban Central", Description = "Graffiti on public property needs cleanup.", Status = "Resolved" },
-                new Report { Province = "Eastern Cape", Category = "Road Damage", Location = "Port Elizabeth", Description = "Traffic signals malfunctioning at 3rd Street intersection.", Status = "Pending" },
-                new Report { Province = "Western Cape", Category = "Electrical", Location = "Woodstock", Description = "Power outage affecting multiple homes.", Status = "In Progress" },
-                new Report { Province = "Gauteng", Category = "Plumbing", Location = "Midrand", Description = "Leaking municipal water main in residential area.", Status = "Pending" },
-                new Report { Province = "Limpopo", Category = "Road Damage", Location = "Polokwane", Description = "Road shoulder collapsed near highway exit.", Status = "Pending" },
-                new Report { Province = "Western Cape", Category = "Other", Location = "Sea Point", Description = "Abandoned vehicle blocking parking bays.", Status = "Resolved" },
-                new Report { Province = "KwaZulu-Natal", Category = "Plumbing", Location = "Pietermaritzburg", Description = "Water supply issue in residential block.", Status = "Pending" }
+                new Report { UserId = "TEST_C", Province = "Western Cape", Category = "Road Damage", Location = "Gugulethu", Description = "Potholes on Main Street need urgent repair.", Status = "Pending" },
+                new Report { UserId = "TEST_C", Province = "Western Cape", Category = "Plumbing", Location = "Claremont", Description = "Broken water pipe causing flooding near the library.", Status = "In Progress" },
+                new Report { UserId = "TEST_B", Province = "Gauteng", Category = "Electrical", Location = "Soweto", Description = "Street lights not working along 5th Avenue.", Status = "Pending" },
+                new Report { UserId = "TEST_A", Province = "KwaZulu-Natal", Category = "Other", Location = "Durban Central", Description = "Graffiti on public property needs cleanup.", Status = "Resolved" },
+                new Report { UserId = "TEST_B", Province = "Eastern Cape", Category = "Road Damage", Location = "Port Elizabeth", Description = "Traffic signals malfunctioning at 3rd Street intersection.", Status = "Pending" },
+                new Report { UserId = "TEST_A", Province = "Western Cape", Category = "Electrical", Location = "Woodstock", Description = "Power outage affecting multiple homes.", Status = "In Progress" },
+                new Report { UserId = "TEST_B", Province = "Gauteng", Category = "Plumbing", Location = "Midrand", Description = "Leaking municipal water main in residential area.", Status = "Pending" },
+                new Report { UserId = "TEST_A", Province = "Limpopo", Category = "Road Damage", Location = "Polokwane", Description = "Road shoulder collapsed near highway exit.", Status = "Pending" },
+                new Report { UserId = "TEST_A", Province = "Western Cape", Category = "Other", Location = "Sea Point", Description = "Abandoned vehicle blocking parking bays.", Status = "Resolved" },
+                new Report { UserId = "TEST_A", Province = "KwaZulu-Natal", Category = "Plumbing", Location = "Pietermaritzburg", Description = "Water supply issue in residential block.", Status = "Pending" }
             };
 
             // Add seeded reports to all relevant data structures

@@ -69,6 +69,7 @@ namespace IssueReportSystem
             dataGridViewReports.DataSource = ReportService.GetReports()
                 .Select(r => new
                 {
+                    r.UserId,
                     r.Province,
                     r.Category,
                     r.Location,
