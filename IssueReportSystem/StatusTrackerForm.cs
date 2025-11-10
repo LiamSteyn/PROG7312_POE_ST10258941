@@ -185,28 +185,6 @@ namespace IssueReportSystem
         /// </summary>
         private void dataGridViewStatus_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0 && dataGridViewStatus.Rows[e.RowIndex].DataBoundItem != null)
-            {
-                var row = dataGridViewStatus.Rows[e.RowIndex];
-
-                // Accessing properties from the anonymous type binding source
-                string reportId = row.Cells["ReportId"].Value.ToString();
-                string status = row.Cells["Status"].Value.ToString();
-                string location = row.Cells["Location"].Value.ToString();
-
-                // Description field is required for drill-down but is hidden
-                string description = row.Cells["Description"].Value?.ToString() ?? "No detailed description available.";
-
-
-                MessageBox.Show(
-                    $"--- Tracking Report ID: {reportId} ---\n\n" +
-                    $"Status: **{status}**\n" +
-                    $"Location: {location}\n\n" +
-                    $"Issue Details:\n{description}",
-                    $"Progress Tracker for Request {reportId}",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
-            }
         }
 
         // Unused/Placeholder event handlers provided in the prompt:

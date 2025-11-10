@@ -11,6 +11,9 @@ namespace IssueReportSystem.Models
     /// </summary>
     public class Report
     {
+        public Guid ReportId { get; set; }
+        public DateTime CreatedAt { get; set; }
+
         /// <summary>
         /// Gets or sets a unique identifier for the report.
         /// </summary>
@@ -43,11 +46,6 @@ namespace IssueReportSystem.Models
         /// </summary>
         public List<string> AttachmentPaths { get; set; } = new List<string>();
 
-        /// <summary>
-        /// Gets or sets the date and time when the report was created.
-        /// Defaults to the current system date and time.
-        /// </summary>
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         /// <summary>
         /// Gets or sets the current status of the report (e.g., Pending, Resolved).

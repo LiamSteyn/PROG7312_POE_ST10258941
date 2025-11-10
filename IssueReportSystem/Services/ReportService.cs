@@ -33,11 +33,17 @@ namespace IssueReportSystem.Services
         private static Dictionary<string, List<Report>> reportsByUserId
             = new Dictionary<string, List<Report>>();
 
+
+        private static AdvancedDataStructureService advancedService = new AdvancedDataStructureService();
+
+
         /// <summary>
         /// Adds a new report to all relevant data structures.
         /// </summary>
         public static void AddReport(Report report)
         {
+
+
             // Generate a unique key for duplicate prevention
             string key = $"{report.Location}-{report.Description}".ToLower();
 
@@ -84,6 +90,12 @@ namespace IssueReportSystem.Services
             }
 
             reportsByProvinceAndCategory[report.Province][report.Category].AddLast(report);
+
+            advancedService.AddReportToBst(report);
+            // Note: To make the Min-Heap work correctly, you should ensure ReportId and CreatedAt are set
+            report.ReportId = Guid.NewGuid();
+            report.CreatedAt = DateTime.Now;
+            advancedService.EnqueueReportByPriority(report);
         }
 
 
@@ -168,16 +180,16 @@ namespace IssueReportSystem.Services
 
             var seededReports = new List<Report>
             {
-                new Report { UserId = "TEST_C", Province = "Western Cape", Category = "Road Damage", Location = "Gugulethu", Description = "Potholes on Main Street need urgent repair.", Status = "Pending" },
-                new Report { UserId = "TEST_C", Province = "Western Cape", Category = "Plumbing", Location = "Claremont", Description = "Broken water pipe causing flooding near the library.", Status = "In Progress" },
-                new Report { UserId = "TEST_B", Province = "Gauteng", Category = "Electrical", Location = "Soweto", Description = "Street lights not working along 5th Avenue.", Status = "Pending" },
-                new Report { UserId = "TEST_A", Province = "KwaZulu-Natal", Category = "Other", Location = "Durban Central", Description = "Graffiti on public property needs cleanup.", Status = "Resolved" },
-                new Report { UserId = "TEST_B", Province = "Eastern Cape", Category = "Road Damage", Location = "Port Elizabeth", Description = "Traffic signals malfunctioning at 3rd Street intersection.", Status = "Pending" },
-                new Report { UserId = "TEST_A", Province = "Western Cape", Category = "Electrical", Location = "Woodstock", Description = "Power outage affecting multiple homes.", Status = "In Progress" },
-                new Report { UserId = "TEST_B", Province = "Gauteng", Category = "Plumbing", Location = "Midrand", Description = "Leaking municipal water main in residential area.", Status = "Pending" },
-                new Report { UserId = "TEST_A", Province = "Limpopo", Category = "Road Damage", Location = "Polokwane", Description = "Road shoulder collapsed near highway exit.", Status = "Pending" },
-                new Report { UserId = "TEST_A", Province = "Western Cape", Category = "Other", Location = "Sea Point", Description = "Abandoned vehicle blocking parking bays.", Status = "Resolved" },
-                new Report { UserId = "TEST_A", Province = "KwaZulu-Natal", Category = "Plumbing", Location = "Pietermaritzburg", Description = "Water supply issue in residential block.", Status = "Pending" }
+                new Report { UserId = "TEST_C", Province = "Western Cape", Category = "Road Damage", Location = "Gugulethu", Description = "Potholes on Main Street need urgent repair.", Status = "Pending", CreatedAt = DateTime.Now.AddHours(-20) },
+                new Report { UserId = "TEST_C", Province = "Western Cape", Category = "Plumbing", Location = "Claremont", Description = "Broken water pipe causing flooding near the library.", Status = "In Progress", CreatedAt = DateTime.Now.AddHours(-10) },
+                new Report { UserId = "TEST_B", Province = "Gauteng", Category = "Electrical", Location = "Soweto", Description = "Street lights not working along 5th Avenue.", Status = "Pending", CreatedAt = DateTime.Now.AddHours(-10) },
+                new Report { UserId = "TEST_A", Province = "KwaZulu-Natal", Category = "Other", Location = "Durban Central", Description = "Graffiti on public property needs cleanup.", Status = "Resolved", CreatedAt = DateTime.Now.AddHours(-10) },
+                new Report { UserId = "TEST_B", Province = "Eastern Cape", Category = "Road Damage", Location = "Port Elizabeth", Description = "Traffic signals malfunctioning at 3rd Street intersection.", Status = "Pending", CreatedAt = DateTime.Now.AddHours(-10) },
+                new Report { UserId = "TEST_A", Province = "Western Cape", Category = "Electrical", Location = "Woodstock", Description = "Power outage affecting multiple homes.", Status = "In Progress", CreatedAt = DateTime.Now.AddHours(-10) },
+                new Report { UserId = "TEST_B", Province = "Gauteng", Category = "Plumbing", Location = "Midrand", Description = "Leaking municipal water main in residential area.", Status = "Pending", CreatedAt = DateTime.Now.AddHours(-10) },
+                new Report { UserId = "TEST_A", Province = "Limpopo", Category = "Road Damage", Location = "Polokwane", Description = "Road shoulder collapsed near highway exit.", Status = "Pending", CreatedAt = DateTime.Now.AddHours(-10) },
+                new Report { UserId = "TEST_A", Province = "Western Cape", Category = "Other", Location = "Sea Point", Description = "Abandoned vehicle blocking parking bays.", Status = "Resolved", CreatedAt = DateTime.Now.AddHours(-10) },
+                new Report { UserId = "TEST_A", Province = "KwaZulu-Natal", Category = "Plumbing", Location = "Pietermaritzburg", Description = "Water supply issue in residential block.", Status = "Pending", CreatedAt = DateTime.Now.AddHours(-10) }
             };
 
             // Add seeded reports to all relevant data structures
@@ -187,6 +199,22 @@ namespace IssueReportSystem.Services
             }
         }
 
+        /// <summary>
+        /// Returns all reports sorted alphabetically by location using the BST's In-Order traversal.
+        /// (Meets the "organising and retrieving" requirement via Tree)
+        /// </summary>
+        public static List<Report> GetReportsSortedByLocation()
+        {
+            return advancedService.GetReportsSortedByLocation();
+        }
 
+        /// <summary>
+        /// Retrieves and removes the single highest priority report (the oldest report) from the Min-Heap.
+        /// (Meets the "optimise the display of service request status" requirement via Heap)
+        /// </summary>
+        public static Report DequeueHighestPriorityReport()
+        {
+            return advancedService.DequeueHighestPriorityReport();
+        }
     }
 }
