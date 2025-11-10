@@ -31,7 +31,6 @@
             this.dataGridViewReports = new System.Windows.Forms.DataGridView();
             this.comboProvince = new System.Windows.Forms.ComboBox();
             this.comboCategory = new System.Windows.Forms.ComboBox();
-            this.btnBack = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -39,6 +38,7 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
+            this.btnBack = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewReports)).BeginInit();
             this.SuspendLayout();
             // 
@@ -70,20 +70,6 @@
             this.comboCategory.Size = new System.Drawing.Size(121, 21);
             this.comboCategory.TabIndex = 2;
             this.comboCategory.SelectedIndexChanged += new System.EventHandler(this.comboCategory_SelectedIndexChanged);
-            // 
-            // btnBack
-            // 
-            this.btnBack.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.btnBack.Image = global::IssueReportSystem.Properties.Resources.icons8_home_32;
-            this.btnBack.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnBack.Location = new System.Drawing.Point(369, 22);
-            this.btnBack.Name = "btnBack";
-            this.btnBack.Size = new System.Drawing.Size(50, 51);
-            this.btnBack.TabIndex = 3;
-            this.btnBack.Text = "Home";
-            this.btnBack.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnBack.UseVisualStyleBackColor = true;
-            this.btnBack.Click += new System.EventHandler(this.btnBack_Click);
             // 
             // label1
             // 
@@ -160,6 +146,20 @@
             this.button1.Text = "Search";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // btnBack
+            // 
+            this.btnBack.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.btnBack.Image = global::IssueReportSystem.Properties.Resources.icons8_home_32;
+            this.btnBack.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnBack.Location = new System.Drawing.Point(369, 22);
+            this.btnBack.Name = "btnBack";
+            this.btnBack.Size = new System.Drawing.Size(50, 51);
+            this.btnBack.TabIndex = 3;
+            this.btnBack.Text = "Home";
+            this.btnBack.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnBack.UseVisualStyleBackColor = true;
+            this.btnBack.Click += new System.EventHandler(this.btnBack_Click);
             // 
             // ViewReportsForm
             // 

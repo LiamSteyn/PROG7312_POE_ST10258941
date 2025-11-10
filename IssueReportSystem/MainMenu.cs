@@ -47,7 +47,10 @@ namespace IssueReportSystem
         /// </summary>
         private void button3_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("This feature is coming soon!", "Coming Soon", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            StatusTrackerForm StatusTrackerForm = new StatusTrackerForm();
+            this.Hide();                     // Hide MainMenu
+            StatusTrackerForm.ShowDialog();    // Open ViewReportsForm as modal
+            this.Show();                     // Show MainMenu after ViewReportsForm closes
         }
 
         private void label1_Click(object sender, EventArgs e){}

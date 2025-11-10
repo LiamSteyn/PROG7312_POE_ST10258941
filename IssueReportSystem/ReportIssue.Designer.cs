@@ -30,7 +30,6 @@
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.IssueTitle = new System.Windows.Forms.Label();
-            this.submitButton = new System.Windows.Forms.Button();
             this.issueDescription = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.issueLocation = new System.Windows.Forms.TextBox();
@@ -39,11 +38,12 @@
             this.progressBarReport = new System.Windows.Forms.ProgressBar();
             this.label3 = new System.Windows.Forms.Label();
             this.provinceDropdown = new System.Windows.Forms.ComboBox();
-            this.homeButton = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.userIdTextBox = new System.Windows.Forms.TextBox();
+            this.submitButton = new System.Windows.Forms.Button();
+            this.homeButton = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -105,23 +105,6 @@
             this.IssueTitle.Text = "Report an Issue";
             this.IssueTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.IssueTitle.Click += new System.EventHandler(this.Title_Click);
-            // 
-            // submitButton
-            // 
-            this.tableLayoutPanel1.SetColumnSpan(this.submitButton, 3);
-            this.submitButton.Dock = System.Windows.Forms.DockStyle.Top;
-            this.submitButton.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.submitButton.Image = global::IssueReportSystem.Properties.Resources.icons8_send_32;
-            this.submitButton.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.submitButton.Location = new System.Drawing.Point(6, 589);
-            this.submitButton.Margin = new System.Windows.Forms.Padding(6);
-            this.submitButton.Name = "submitButton";
-            this.submitButton.Size = new System.Drawing.Size(564, 52);
-            this.submitButton.TabIndex = 4;
-            this.submitButton.Text = "Submit Issue";
-            this.submitButton.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.submitButton.UseVisualStyleBackColor = true;
-            this.submitButton.Click += new System.EventHandler(this.submitButton_Click);
             // 
             // issueDescription
             // 
@@ -250,21 +233,6 @@
             this.provinceDropdown.TabIndex = 16;
             this.provinceDropdown.SelectedIndexChanged += new System.EventHandler(this.provinceDropdown_SelectedIndexChanged);
             // 
-            // homeButton
-            // 
-            this.homeButton.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.homeButton.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.homeButton.Image = global::IssueReportSystem.Properties.Resources.icons8_home_32;
-            this.homeButton.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.homeButton.Location = new System.Drawing.Point(493, 34);
-            this.homeButton.Name = "homeButton";
-            this.homeButton.Size = new System.Drawing.Size(50, 50);
-            this.homeButton.TabIndex = 13;
-            this.homeButton.Text = "Home";
-            this.homeButton.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.homeButton.UseVisualStyleBackColor = true;
-            this.homeButton.Click += new System.EventHandler(this.button1_Click);
-            // 
             // label2
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -332,6 +300,38 @@
             this.userIdTextBox.TabIndex = 18;
             this.userIdTextBox.Tag = "";
             this.userIdTextBox.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            // 
+            // submitButton
+            // 
+            this.tableLayoutPanel1.SetColumnSpan(this.submitButton, 3);
+            this.submitButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.submitButton.Font = new System.Drawing.Font("Segoe UI", 8F);
+            this.submitButton.Image = global::IssueReportSystem.Properties.Resources.icons8_send_32;
+            this.submitButton.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.submitButton.Location = new System.Drawing.Point(6, 589);
+            this.submitButton.Margin = new System.Windows.Forms.Padding(6);
+            this.submitButton.Name = "submitButton";
+            this.submitButton.Size = new System.Drawing.Size(564, 52);
+            this.submitButton.TabIndex = 4;
+            this.submitButton.Text = "Submit Issue";
+            this.submitButton.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.submitButton.UseVisualStyleBackColor = true;
+            this.submitButton.Click += new System.EventHandler(this.submitButton_Click);
+            // 
+            // homeButton
+            // 
+            this.homeButton.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.homeButton.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.homeButton.Image = global::IssueReportSystem.Properties.Resources.icons8_home_32;
+            this.homeButton.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.homeButton.Location = new System.Drawing.Point(493, 34);
+            this.homeButton.Name = "homeButton";
+            this.homeButton.Size = new System.Drawing.Size(50, 50);
+            this.homeButton.TabIndex = 13;
+            this.homeButton.Text = "Home";
+            this.homeButton.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.homeButton.UseVisualStyleBackColor = true;
+            this.homeButton.Click += new System.EventHandler(this.button1_Click);
             // 
             // ReportIssue
             // 

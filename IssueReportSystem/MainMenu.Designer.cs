@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.Title = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
@@ -40,20 +39,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
-            // Title
-            // 
-            this.Title.AutoSize = true;
-            this.tableLayoutPanel1.SetColumnSpan(this.Title, 2);
-            this.Title.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Title.Font = new System.Drawing.Font("Segoe UI", 12.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Title.Location = new System.Drawing.Point(3, 398);
-            this.Title.Name = "Title";
-            this.Title.Size = new System.Drawing.Size(398, 31);
-            this.Title.TabIndex = 2;
-            this.Title.Text = "Coming Soon!";
-            this.Title.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.Title.Click += new System.EventHandler(this.label1_Click);
-            // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 2;
@@ -61,9 +46,8 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Controls.Add(this.label1, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.button1, 1, 4);
-            this.tableLayoutPanel1.Controls.Add(this.button3, 0, 6);
+            this.tableLayoutPanel1.Controls.Add(this.button3, 0, 4);
             this.tableLayoutPanel1.Controls.Add(this.button2, 0, 3);
-            this.tableLayoutPanel1.Controls.Add(this.Title, 0, 5);
             this.tableLayoutPanel1.Controls.Add(this.pictureBox1, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.button4, 1, 3);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -115,15 +99,14 @@
             // button3
             // 
             this.button3.AutoSize = true;
-            this.tableLayoutPanel1.SetColumnSpan(this.button3, 2);
             this.button3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.button3.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button3.Image = global::IssueReportSystem.Properties.Resources.icons8_coming_soon_32;
             this.button3.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button3.Location = new System.Drawing.Point(25, 439);
+            this.button3.Location = new System.Drawing.Point(25, 335);
             this.button3.Margin = new System.Windows.Forms.Padding(25, 10, 25, 10);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(354, 63);
+            this.button3.Size = new System.Drawing.Size(152, 53);
             this.button3.TabIndex = 5;
             this.button3.Text = "Service\r\nRequest Status";
             this.button3.UseVisualStyleBackColor = true;
@@ -197,8 +180,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Label Title;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button2;
