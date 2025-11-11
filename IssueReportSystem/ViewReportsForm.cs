@@ -208,16 +208,7 @@ namespace IssueReportSystem
         /// </summary>
         private List<DuplicateReport> FindPotentialDuplicates(string location, string category, string userId)
         {
-            var duplicates = new List<DuplicateReport>();
-
-            // **STEP 1: Use GRAPH to find connected locations (BFS Traversal)**
-            var connectedLocations = ReportService.GetConnectedLocations(location);
-
-            // If no connections, check only the same location
-            if (connectedLocations.Count == 0)
-            {
-                connectedLocations = new List<string> { location };
-            }
+            var duplicates = new List<DuplicateReport>();       
 
             // **STEP 2: Use BST to get all reports sorted by location**
             var allReports = ReportService.GetReportsSortedByLocation();
@@ -238,8 +229,6 @@ namespace IssueReportSystem
                 // Skip if same user (we want duplicates by DIFFERENT users)
                 if (report.UserId == userId) continue;
 
-                // Check if report is in a connected location (Graph relationship)
-                if (!connectedLocations.Contains(report.Location)) continue;
 
                 // Check if same category
                 if (report.Category != category) continue;

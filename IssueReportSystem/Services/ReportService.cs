@@ -200,52 +200,6 @@ namespace IssueReportSystem.Services
             }
         }
 
-        public static List<string> GetConnectedLocations(string startLocation)
-        {
-            // Example adjacency graph (can be adjusted or loaded dynamically)
-            var locationGraph = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase)
-            {
-                { "Cape Town", new List<string> { "Stellenbosch", "Paarl", "Somerset West" } },
-                { "Stellenbosch", new List<string> { "Cape Town", "Somerset West" } },
-                { "Paarl", new List<string> { "Cape Town", "Wellington" } },
-                { "Somerset West", new List<string> { "Stellenbosch", "Cape Town" } },
-                { "Wellington", new List<string> { "Paarl" } },
-                { "Johannesburg", new List<string> { "Sandton", "Soweto" } },
-                { "Sandton", new List<string> { "Johannesburg" } },
-                { "Soweto", new List<string> { "Johannesburg" } },
-            };
-
-            var connected = new List<string>();
-            var visited = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            var queue = new Queue<string>();
-
-            if (!locationGraph.ContainsKey(startLocation))
-                return connected;
-
-            queue.Enqueue(startLocation);
-            visited.Add(startLocation);
-
-            while (queue.Count > 0)
-            {
-                string current = queue.Dequeue();
-
-                if (locationGraph.ContainsKey(current))
-                {
-                    foreach (var neighbor in locationGraph[current])
-                    {
-                        if (!visited.Contains(neighbor))
-                        {
-                            visited.Add(neighbor);
-                            queue.Enqueue(neighbor);
-                            connected.Add(neighbor);
-                        }
-                    }
-                }
-            }
-
-            return connected;
-        }
-
 
         /// <summary>
         /// Returns all reports sorted alphabetically by location using the BST's In-Order traversal.
