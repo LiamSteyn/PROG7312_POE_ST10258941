@@ -1,140 +1,155 @@
-﻿using IssueReportSystem.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// The 'using' statements bring in necessary namespaces and types.
+using IssueReportSystem.Models; // Imports the data models, specifically the 'Report' class.
+using System;                   // Provides fundamental classes and base types (e.g., DateTime, StringComparison).
+using System.Collections.Generic; // Provides interfaces and classes for generic collections (e.g., List<T>, Dictionary<TKey, TValue>).
+using System.Linq;                // Provides Language-Integrated Query (LINQ) features.
+using System.Text;                // Provides classes for working with strings and encoding (not directly used here, but kept).
+using System.Threading.Tasks;     // Provides types for implementing asynchronous operations (not directly used here, but kept).
 
+// Define the namespace for the application's service layer.
 namespace IssueReportSystem.Services
 {
-    /// <summary>
-    /// Static service class that manages all reports submitted by users.
-    /// Stores reports in multiple data structures for efficient retrieval and categorization.
-    /// </summary>
+
+    // Static class that acts as the main repository and management service for Report objects.
+    // It utilizes various data structures for different access patterns.
     public static class ReportService
     {
-        // LinkedList will store ALL reports in the order they were added
-        private static LinkedList<Report> reports = new LinkedList<Report>();
+        // LinkedList will store ALL reports in the order they were added (insertion order).
+        private static LinkedList<Report> reports = new LinkedList<Report>();
 
-        // Queue to track reports with "Pending" status (FIFO order)
-        private static Queue<Report> pendingQueue = new Queue<Report>();
+        // Queue to track reports with "Pending" status (First-In, First-Out, for processing).
+        private static Queue<Report> pendingQueue = new Queue<Report>();
 
-        // Stack for "Recently Viewed" reports (LIFO)
-        private static Stack<Report> recentReports = new Stack<Report>();
+        // Stack for "Recently Viewed" reports (Last-In, First-Out, for typical undo/back functionality).
+        private static Stack<Report> recentReports = new Stack<Report>();
 
-        // Multi-level structure: Province → Category → LinkedList of Reports
-        private static Dictionary<string, Dictionary<string, LinkedList<Report>>> reportsByProvinceAndCategory
-            = new Dictionary<string, Dictionary<string, LinkedList<Report>>>();
+        // Multi-level structure: Province (Key 1) → Category (Key 2) → LinkedList of Reports.
+        // Allows efficient lookup of reports by a combination of geographic location and type.
+        private static Dictionary<string, Dictionary<string, LinkedList<Report>>> reportsByProvinceAndCategory
+      = new Dictionary<string, Dictionary<string, LinkedList<Report>>>();
 
-        // HashSet to prevent duplicates (based on unique key: Location+Description)
-        private static HashSet<string> reportKeys = new HashSet<string>();
+        // HashSet to prevent duplicates or quickly check for existence of a unique report key.
+        // The key is based on a concatenation of Location and Description.
+        private static HashSet<string> reportKeys = new HashSet<string>();
 
-        // Key: User ID (string), Value: List of Reports submitted by that user
-        private static Dictionary<string, List<Report>> reportsByUserId
-            = new Dictionary<string, List<Report>>();
+        // Dictionary for efficient O(1) average time complexity lookup of reports by the user who submitted them.
+        // Key: User ID (string), Value: List of Reports submitted by that user.
+        private static Dictionary<string, List<Report>> reportsByUserId
+      = new Dictionary<string, List<Report>>();
 
 
-        private static AdvancedDataStructureService advancedService = new AdvancedDataStructureService();
+        // Instance of the AdvancedDataStructureService to handle BST and Min-Heap operations.
+        private static AdvancedDataStructureService advancedService = new AdvancedDataStructureService();
 
 
-        /// <summary>
-        /// Adds a new report to all relevant data structures.
-        /// </summary>
+
+        // Public static method to add a new Report to all relevant data structures.
         public static void AddReport(Report report)
         {
 
+            // Generate a unique key for duplicate prevention check (case-insensitive key).
+            string key = $"{report.Location}-{report.Description}".ToLower();
 
-            // Generate a unique key for duplicate prevention
-            string key = $"{report.Location}-{report.Description}".ToLower();
-
-            if (reportKeys.Contains(key))
+            // Checks if a report with this specific Location and Description already exists.
+            if (reportKeys.Contains(key))
             {
-                
-            }
+                // Current implementation does nothing if a duplicate is found (i.e., it proceeds to add it).
+                // The `reportKeys.Add(key);` later on would still run and fail to add the key if it exists,
+                // but the report object itself is added to all other structures.
+            }
 
             string userId = report.UserId;
 
-            if (string.IsNullOrWhiteSpace(userId))
+            // Robustness check: Ensure UserId is not null or whitespace.
+            if (string.IsNullOrWhiteSpace(userId))
             {
-                userId = "UNKNOWN_USER"; // Assign a default key to prevent crash
+                userId = "UNKNOWN_USER"; // Assign a default key to prevent crash when accessing the dictionary.
+            }
+
+            // Check if the user ID has an entry in the reportsByUserId dictionary.
+            if (!reportsByUserId.ContainsKey(userId))
+            {
+                // If not, create a new list for that user's reports.
+                reportsByUserId[userId] = new List<Report>();
             }
 
-            if (!reportsByUserId.ContainsKey(userId))
-            {
-                // If not, create a new list for that user
-                reportsByUserId[userId] = new List<Report>();
-            }
+            // Add the report to the user's specific list.
+            reportsByUserId[userId].Add(report);
 
-            reportsByUserId[userId].Add(report);
+            // Attempt to add the unique key to the HashSet.
+            reportKeys.Add(key);
 
-            reportKeys.Add(key);
+            // Add to main linked list (maintains chronological insertion order).
+            reports.AddLast(report);
 
-            // Add to main linked list
-            reports.AddLast(report);
-
-            // Add to pending queue if needed
-            if (report.Status == "Pending")
+            // Add to pending queue if the report's status is "Pending".
+            if (report.Status == "Pending")
             {
                 pendingQueue.Enqueue(report);
             }
 
-            // Add to multi-level dictionary
-            if (!reportsByProvinceAndCategory.ContainsKey(report.Province))
+            // --- Manage Multi-Level Dictionary (Province → Category) ---
+            // 1. Check/create the Province level dictionary entry.
+            if (!reportsByProvinceAndCategory.ContainsKey(report.Province))
             {
                 reportsByProvinceAndCategory[report.Province] = new Dictionary<string, LinkedList<Report>>();
             }
 
-            if (!reportsByProvinceAndCategory[report.Province].ContainsKey(report.Category))
+            // 2. Check/create the Category level LinkedList entry within the Province dictionary.
+            if (!reportsByProvinceAndCategory[report.Province].ContainsKey(report.Category))
             {
                 reportsByProvinceAndCategory[report.Province][report.Category] = new LinkedList<Report>();
             }
 
-            reportsByProvinceAndCategory[report.Province][report.Category].AddLast(report);
+            // 3. Add the report to the specific Province/Category list.
+            reportsByProvinceAndCategory[report.Province][report.Category].AddLast(report);
 
-            advancedService.AddReportToBst(report);
-            // Note: To make the Min-Heap work correctly, you should ensure ReportId and CreatedAt are set
+            // --- Manage Advanced Data Structures ---
+            // Add the report to the Binary Search Tree (BST) for location-based sorting.
+            advancedService.AddReportToBst(report);
+
+            // Note: To make the Min-Heap work correctly, you should ensure ReportId and CreatedAt are set.
+            // This ensures the report has the necessary priority key (CreatedAt) for the heap.
             report.ReportId = Guid.NewGuid();
             report.CreatedAt = DateTime.Now;
+
+            // Add the report to the Priority Queue (Min-Heap, prioritized by CreatedAt).
             advancedService.EnqueueReportByPriority(report);
         }
 
 
 
-        /// <summary>
-        /// Exposes the full dictionary of reports organized by province and category.
-        /// Useful for populating filters dynamically.
-        /// </summary>
+
+        // Public property to expose the complex multi-level dictionary for external access.
         public static Dictionary<string, Dictionary<string, LinkedList<Report>>> ReportsByProvinceAndCategoryDict
         {
             get { return reportsByProvinceAndCategory; }
         }
 
-        /// <summary>
-        /// Returns all reports submitted by a specific user ID.
-        /// </summary>
-        /// <param name="userId">The unique identifier for the user.</param>
-        /// <returns>A list of reports, or an empty list if the user has no reports.</returns>
+
+        // Public static method to retrieve all reports submitted by a specific user ID.
         public static List<Report> GetReportsByUserId(string userId)
         {
-            // O(1) average time complexity for lookup!
-            if (reportsByUserId.ContainsKey(userId))
+            // Efficient lookup due to the use of a Dictionary (O(1) average time complexity).
+            if (reportsByUserId.ContainsKey(userId))
             {
                 return reportsByUserId[userId];
             }
-            return new List<Report>();
+            // Return an empty list if no reports are found for the given user ID.
+            return new List<Report>();
         }
 
-        /// <summary>
-        /// Seeds initial reports into the system for demonstration purposes.
-        /// Only runs if no reports exist yet to avoid duplicates.
-        /// </summary>
+
+        // Public static method to populate the data structures with initial/sample data.
         public static void SeedReports()
         {
-            if (reports.Count > 0) return; // don't seed again if reports exist
+            // Prevent re-seeding if the main reports list already contains data.
+            if (reports.Count > 0) return;
 
-            
+
+            // Define a list of initial Report objects.
             var seededReports = new List<Report>
-            {
+              {
                 new Report { UserId = "TEST_A", Province = "Western Cape", Category = "Road Damage", Location = "Claremont Street 2", Description = "Potholes on Main Street need urgent repair.", Status = "In Progress", CreatedAt = DateTime.Now.AddHours(-10) },
                 new Report { UserId = "TEST_B", Province = "Gauteng", Category = "Electrical", Location = "Soweto Street 1", Description = "Street lights not working along 5th Avenue.", Status = "Pending", CreatedAt = DateTime.Now.AddHours(-10) },
                 new Report { UserId = "TEST_A", Province = "KwaZulu-Natal", Category = "Other", Location = "Durban Central Street 2", Description = "Graffiti on public property needs cleanup.", Status = "Resolved", CreatedAt = DateTime.Now.AddHours(-10) },
@@ -147,66 +162,67 @@ namespace IssueReportSystem.Services
                 new Report { UserId = "TEST_A", Province = "Western Cape", Category = "Other", Location = "Sea Point Street 1", Description = "Abandoned vehicle blocking parking bays.", Status = "Resolved", CreatedAt = DateTime.Now.AddHours(-10) },
                 new Report { UserId = "TEST_A", Province = "KwaZulu-Natal", Category = "Plumbing", Location = "Pietermaritzburg Street 1", Description = "Water supply issue in residential block.", Status = "Pending", CreatedAt = DateTime.Now.AddHours(-12) },
                 new Report { UserId = "TEST_C", Province = "Western Cape", Category = "Road Damage", Location = "Claremont Street 2", Description = "Alot of potholes in the area.", Status = "Pending", CreatedAt = DateTime.Now.AddHours(-9) }
-            };
+              };
 
-            // Add seeded reports to all relevant data structures
-            foreach (var r in seededReports)
+            // Iterate through the sample reports and add them using the main AddReport method,
+            // ensuring they are correctly placed in all data structures.
+            foreach (var r in seededReports)
             {
                 AddReport(r);
             }
         }
 
-        /// <summary>
-        /// Retrieves the single highest priority report (the oldest report) from the Min-Heap
-        /// without removing it. (O(1) time complexity).    
-        /// </summary>
+
+        // Public method to peek at the highest priority report without removing it.
+        // Delegates the call to the AdvancedDataStructureService's Min-Heap implementation.
         public static Report PeekHighestPriorityReport()
         {
             return advancedService.PeekHighestPriorityReport();
         }
 
 
-        /// <summary>
-        /// Returns all reports sorted alphabetically by location using the BST's In-Order traversal.
-        /// (Meets the "organising and retrieving" requirement via Tree)
-        /// </summary>
-        public static List<Report> GetReportsSortedByLocation()
+        // Public method to retrieve all reports sorted alphabetically by Location.
+        // Delegates the call to the AdvancedDataStructureService's BST In-Order Traversal.
+        public static List<Report> GetReportsSortedByLocation()
         {
             return advancedService.GetReportsSortedByLocation();
         }
 
-        /// <summary>
-        /// Retrieves a ranking of locations based on the number of active reports, 
-        /// utilizing the AdvancedDataStructureService for analysis.
-        /// </summary>
+
+        // Public method to get a ranking of provinces based on the density of active reports.
+        // Delegates the data processing to the AdvancedDataStructureService.
         public static Dictionary<string, int> GetLocationDensityRanking()
         {
             return advancedService.GetLocationDensityRanking();
         }
 
-        /// <summary>
-        /// Finds duplicate reports that share the same Location and Category
-        /// within ±12 hours of each other.
-        /// </summary>
+
+        // Public method to identify and return reports that are considered duplicates based on criteria.
         public static List<Report> GetDuplicateReports()
         {
             var duplicateReports = new List<Report>();
 
-            var reportList = reports.ToList();
+            // Convert the LinkedList to a List for indexed access in the nested loops.
+            var reportList = reports.ToList();
 
-            for (int i = 0; i < reportList.Count; i++)
+            // Use a nested loop to compare every report (r1) with every subsequent report (r2).
+            for (int i = 0; i < reportList.Count; i++)
             {
                 for (int j = i + 1; j < reportList.Count; j++)
                 {
                     var r1 = reportList[i];
                     var r2 = reportList[j];
 
-                    // Check if same location + category, and within ±12 hours
-                    if (r1.Location.Equals(r2.Location, StringComparison.OrdinalIgnoreCase) &&
+                    // Criteria for considering reports as duplicates:
+                    // 1. Same Location (case-insensitive).
+                    // 2. Same Category (case-insensitive).
+                    // 3. Submitted within a 12-hour window of each other.
+                    if (r1.Location.Equals(r2.Location, StringComparison.OrdinalIgnoreCase) &&
                         r1.Category.Equals(r2.Category, StringComparison.OrdinalIgnoreCase) &&
                         Math.Abs((r1.CreatedAt - r2.CreatedAt).TotalHours) <= 12)
                     {
-                        if (!duplicateReports.Contains(r1))
+                        // Add r1 and r2 to the duplicate list if they are not already present.
+                        if (!duplicateReports.Contains(r1))
                             duplicateReports.Add(r1);
                         if (!duplicateReports.Contains(r2))
                             duplicateReports.Add(r2);
@@ -217,39 +233,39 @@ namespace IssueReportSystem.Services
             return duplicateReports;
         }
 
-        /// <summary>
-        /// Returns ALL reports sorted by priority (oldest first) using the Min-Heap (Heap Sort logic).
-        /// This demonstrates the full functionality of the Heap structure.
-        /// NOTE: This clears the internal priority queue, but it is then IMMEDIATELY rebuilt.
-        /// </summary>
+
+        // Public method to retrieve all reports from the Min-Heap sorted by priority (CreatedAt ascending).
+        // This process temporarily empties the heap and then rebuilds it to preserve the data structure.
         public static List<Report> GetReportsSortedByPriority()
         {
             List<Report> sortedList = new List<Report>();
 
-            // 1. Store the reports needed for REBUILDING THE HEAP after the sort.
-            // The heap will be empty after the loop below runs.
-            List<Report> reportsToRebuild = advancedService.GetAllReportsFromHeap();
+            // 1. Store the reports needed for REBUILDING THE HEAP after the sort.
+            // We get a copy of the heap's underlying list *before* we start dequeuing.
+            List<Report> reportsToRebuild = advancedService.GetAllReportsFromHeap();
 
-            // 2. Dequeue all reports into the sorted list (O(n log n))
-            // This empties the heap.
-            while (true)
+            // 2. Dequeue all reports into the sorted list (O(n log n) total time).
+            // Each Dequeue operation extracts the highest priority element and re-heapifies. This empties the heap.
+            while (true)
             {
                 Report nextReport = advancedService.DequeueHighestPriorityReport();
 
-                if (nextReport == null)
+                // Break the loop when the heap is empty.
+                if (nextReport == null)
                     break;
 
                 sortedList.Add(nextReport);
             }
 
-            // 3. Rebuild the heap by re-enqueuing all reports. (O(n log n))
-            // Use the list we saved in step 1.
-            foreach (var report in reportsToRebuild)
+            // 3. Rebuild the heap by re-enqueuing all reports. (O(n log n) total time).
+            // This restores the priority queue structure for future operations.
+            foreach (var report in reportsToRebuild)
             {
                 advancedService.EnqueueReportByPriority(report);
             }
 
-            return sortedList;
+            // Return the list of reports sorted by priority (earliest CreatedAt first).
+            return sortedList;
         }
 
     }

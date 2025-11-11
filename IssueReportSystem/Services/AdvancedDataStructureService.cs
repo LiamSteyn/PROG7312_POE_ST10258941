@@ -1,202 +1,243 @@
-﻿using IssueReportSystem.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿// The 'using' statements bring in necessary namespaces and types.
+using IssueReportSystem.Models; // Imports the data models, specifically the 'Report' class.
+using System;                   // Provides fundamental classes and base types, e.g., StringComparison.
+using System.Collections.Generic; // Provides interfaces and classes that define generic collections, e.g., List<T>, Dictionary<TKey, TValue>.
+using System.Linq;                // Provides language-integrated query (LINQ) features for filtering, sorting, and grouping.
 
+// Define the namespace for the service classes in the Issue Report System.
 namespace IssueReportSystem.Services
 {
-    /// <summary>
-    /// Service to manage reports using advanced data structures:
-    /// - Trees (BST, AVL, Red-Black concepts)
-    /// - Heaps (Min-Heap for priority)
-    /// - Graphs (Location relationships)
-    /// - Graph Traversal (BFS, DFS)
-    /// - Minimum Spanning Tree (MST using Kruskal's/Prim's)
-    /// </summary>
+
+    // Internal class encapsulating advanced data structures (BST and Min Heap)
+    // for managing 'Report' objects efficiently.
     internal class AdvancedDataStructureService
     {
-        // ---  Binary Search Tree (BST) for efficient organization and retrieval ---
+        // ---  Binary Search Tree (BST) for efficient organization and retrieval ---
 
-        private class BstNode
+        // Private nested class representing a node in the Binary Search Tree (BST).
+        private class BstNode
         {
-            public Report Report { get; set; }
-            public BstNode Left { get; set; }
-            public BstNode Right { get; set; }
+            // Data payload: The Report object stored in this node.
+            public Report Report { get; set; }
+            // Reference to the left child node (Reports with a smaller sorting key).
+            public BstNode Left { get; set; }
+            // Reference to the right child node (Reports with a larger sorting key).
+            public BstNode Right { get; set; }
 
-            public BstNode(Report report)
+            // Constructor to initialize a new node with a Report.
+            public BstNode(Report report)
             {
                 Report = report;
             }
         }
 
-        // --- Graph for Location Relationships ---
-        // Key: Location (Node), Value: List of connected locations (Edges)
-        private Dictionary<string, List<string>> _locationGraph = new Dictionary<string, List<string>>();
 
-        // Example method to set up connections (you would call this during seeding)
-        public void BuildLocationGraph(Dictionary<string, List<string>> connections)
-        {
-            // Loads connections from ReportService (or a config source)
-            _locationGraph = connections;
-        }
 
-        /// <summary>
-        /// Returns a list containing all reports currently in the Min-Heap.
-        /// This is used primarily for rebuilding the heap after a full sort operation.
-        /// </summary>
+        // Public method to retrieve all reports currently in the Min Heap.
         public List<Report> GetAllReportsFromHeap()
         {
-            // Return a copy of the list to prevent external modification of the heap structure
-            return new List<Report>(_priorityMinHeap);
+            // Return a copy of the list to prevent external modification of the heap structure.
+            return new List<Report>(_priorityMinHeap);
         }
 
-        private BstNode _reportBstRoot = null;
+        // Private field to hold the root node of the Binary Search Tree.
+        private BstNode _reportBstRoot = null;
 
-        public void AddReportToBst(Report report)
+        // Public method to add a new Report to the BST.
+        public void AddReportToBst(Report report)
         {
-            _reportBstRoot = InsertNode(_reportBstRoot, report);
+            // Starts the recursive insertion process from the root, updating the root reference if needed (for the initial insertion).
+            _reportBstRoot = InsertNode(_reportBstRoot, report);
         }
 
-        private BstNode InsertNode(BstNode current, Report report)
+        // Private recursive method to insert a Report into the BST, ordered by Report.Location.
+        private BstNode InsertNode(BstNode current, Report report)
         {
-            if (current == null)
+            // Base case: If the current node is null, we've found the insertion point.
+            if (current == null)
             {
-                return new BstNode(report);
+                // Create and return the new node.
+                return new BstNode(report);
             }
 
-            int comparison = string.Compare(report.Location, current.Report.Location, StringComparison.OrdinalIgnoreCase);
+            // Compare the new report's Location with the current node's report's Location (case-insensitive, culture-independent).
+            int comparison = string.Compare(report.Location, current.Report.Location, StringComparison.OrdinalIgnoreCase);
 
-            if (comparison < 0)
+            // If the new report's Location is lexicographically less than the current node's...
+            if (comparison < 0)
             {
-                current.Left = InsertNode(current.Left, report);
+                // Recurse down the left subtree.
+                current.Left = InsertNode(current.Left, report);
             }
-            else if (comparison > 0)
+            // If the new report's Location is lexicographically greater than the current node's...
+            else if (comparison > 0)
             {
-                current.Right = InsertNode(current.Right, report);
+                // Recurse down the right subtree.
+                current.Right = InsertNode(current.Right, report);
             }
+            // Note: If comparison == 0 (duplicate Location), the node is not inserted, preserving the structure.
 
-            return current;
+            // Return the current node (its children may have been updated).
+            return current;
         }
 
-        public List<Report> GetReportsSortedByLocation()
+        // Public method to retrieve all Reports from the BST, sorted by Location.
+        public List<Report> GetReportsSortedByLocation()
         {
             var sortedList = new List<Report>();
-            InOrderTraversal(_reportBstRoot, sortedList);
+            // Perform an In-Order Traversal on the BST, which visits nodes in ascending order of the key (Location).
+            InOrderTraversal(_reportBstRoot, sortedList);
             return sortedList;
         }
 
-        private void InOrderTraversal(BstNode node, List<Report> list)
+        // Private recursive method implementing the In-Order Traversal algorithm.
+        // Traversal order: Left -> Root -> Right.
+        private void InOrderTraversal(BstNode node, List<Report> list)
         {
-            if (node != null)
+            // Check if the current node is valid.
+            if (node != null)
             {
-                InOrderTraversal(node.Left, list);
-                list.Add(node.Report);
-                InOrderTraversal(node.Right, list);
+                // 1. Traverse the left subtree.
+                InOrderTraversal(node.Left, list);
+                // 2. Visit the current node (add the Report to the list).
+                list.Add(node.Report);
+                // 3. Traverse the right subtree.
+                InOrderTraversal(node.Right, list);
             }
         }
 
-        // --- Min-Heap for priority management ---
 
+        // --- Priority Queue implemented as a Min-Heap ---
+
+        // Private field to hold the Min Heap structure, using a List to represent a complete binary tree.
+        // The priority is based on the Report.CreatedAt property (earlier date/time means higher priority, hence a Min Heap).
         private List<Report> _priorityMinHeap = new List<Report>();
 
-        public void EnqueueReportByPriority(Report report)
+        // Public method to add a Report to the priority queue (Min Heap).
+        public void EnqueueReportByPriority(Report report)
         {
-            _priorityMinHeap.Add(report);
-            HeapifyUp(_priorityMinHeap.Count - 1);
+            // Add the new element to the end of the list (the next available position in the heap).
+            _priorityMinHeap.Add(report);
+            // Restore the heap property by bubbling the new element up.
+            HeapifyUp(_priorityMinHeap.Count - 1);
         }
 
-        public Report PeekHighestPriorityReport()
+        // Public method to look at the highest priority Report without removing it.
+        public Report PeekHighestPriorityReport()
         {
-            return _priorityMinHeap.Count > 0 ? _priorityMinHeap[0] : null;
+            // The highest priority element is always at the root (index 0). Returns null if the heap is empty.
+            return _priorityMinHeap.Count > 0 ? _priorityMinHeap[0] : null;
         }
 
-        private void HeapifyUp(int index)
+        // Private method to restore the Min Heap property by moving an element up.
+        private void HeapifyUp(int index)
         {
-            int parentIndex = (index - 1) / 2;
+            // Calculate the parent index: (i - 1) / 2 for 0-based indexing.
+            int parentIndex = (index - 1) / 2;
+
+            // Loop while the current node is not the root and its 'CreatedAt' date is earlier (higher priority) than its parent's.
             while (index > 0 && _priorityMinHeap[index].CreatedAt < _priorityMinHeap[parentIndex].CreatedAt)
             {
-                (_priorityMinHeap[index], _priorityMinHeap[parentIndex]) = (_priorityMinHeap[parentIndex], _priorityMinHeap[index]);
-                index = parentIndex;
-                parentIndex = (index - 1) / 2;
+                // Swap the current node with its parent (using C# 7+ tuple deconstruction/assignment for concise swap).
+                (_priorityMinHeap[index], _priorityMinHeap[parentIndex]) = (_priorityMinHeap[parentIndex], _priorityMinHeap[index]);
+                // Move up to the parent's position.
+                index = parentIndex;
+                // Recalculate the new parent's index.
+                parentIndex = (index - 1) / 2;
             }
         }
 
-        private void HeapifyDown(int index)
+        // Private method to restore the Min Heap property by moving an element down.
+        private void HeapifyDown(int index)
         {
-            int leftChild = 2 * index + 1;
+            // Calculate indices of the left and right children.
+            int leftChild = 2 * index + 1;
             int rightChild = 2 * index + 2;
-            int smallest = index;
+            // Assume the current node is the smallest initially.
+            int smallest = index;
 
-            if (leftChild < _priorityMinHeap.Count && _priorityMinHeap[leftChild].CreatedAt < _priorityMinHeap[smallest].CreatedAt)
+            // Check if the left child exists and has a higher priority (earlier CreatedAt date) than the current smallest.
+            if (leftChild < _priorityMinHeap.Count && _priorityMinHeap[leftChild].CreatedAt < _priorityMinHeap[smallest].CreatedAt)
             {
                 smallest = leftChild;
             }
 
-            if (rightChild < _priorityMinHeap.Count && _priorityMinHeap[rightChild].CreatedAt < _priorityMinHeap[smallest].CreatedAt)
+            // Check if the right child exists and has a higher priority (earlier CreatedAt date) than the current smallest.
+            if (rightChild < _priorityMinHeap.Count && _priorityMinHeap[rightChild].CreatedAt < _priorityMinHeap[smallest].CreatedAt)
             {
                 smallest = rightChild;
             }
 
-            if (smallest != index)
+            // If the smallest element is not the current node (a swap is needed)...
+            if (smallest != index)
             {
-                (_priorityMinHeap[index], _priorityMinHeap[smallest]) = (_priorityMinHeap[smallest], _priorityMinHeap[index]);
-                HeapifyDown(smallest);
+                // Swap the current node with the smallest child.
+                (_priorityMinHeap[index], _priorityMinHeap[smallest]) = (_priorityMinHeap[smallest], _priorityMinHeap[index]);
+                // Recursively call HeapifyDown from the new position of the swapped element.
+                HeapifyDown(smallest);
             }
         }
 
-        /// <summary>
-        /// Removes and returns the highest priority report (the oldest) from the Min-Heap.
-        /// This operation takes O(log n) time complexity.
-        /// </summary>
+
+        // Public method to remove and return the highest priority Report (Min Heap extract_min operation).
         public Report DequeueHighestPriorityReport()
         {
-            if (_priorityMinHeap.Count == 0)
+            // Handle the case where the heap is empty.
+            if (_priorityMinHeap.Count == 0)
             {
                 return null;
             }
 
-            // 1. Get the root (highest priority element)
-            Report highestPriority = _priorityMinHeap[0];
+            // 1. Get the root (highest priority element).
+            Report highestPriority = _priorityMinHeap[0];
 
-            // 2. Replace the root with the last element
-            int lastIndex = _priorityMinHeap.Count - 1;
+            // 2. Replace the root (index 0) with the last element of the list.
+            int lastIndex = _priorityMinHeap.Count - 1;
             _priorityMinHeap[0] = _priorityMinHeap[lastIndex];
 
-            // 3. Remove the last element
-            _priorityMinHeap.RemoveAt(lastIndex);
+            // 3. Remove the last element (which is now a duplicate of the new root).
+            _priorityMinHeap.RemoveAt(lastIndex);
 
-            // 4. Re-heapify the structure (push the new root down)
-            if (_priorityMinHeap.Count > 0)
+            // 4. Re-heapify the structure (push the new root down to its correct position).
+            if (_priorityMinHeap.Count > 0)
             {
                 HeapifyDown(0);
             }
 
-            return highestPriority;
+            // Return the element that was removed (the highest priority report).
+            return highestPriority;
         }
 
 
-        /// <summary>
-        /// Calculates which locations have the highest count of active (Pending/In Progress) reports.
-        /// This method uses the results of the BST (GetReportsSortedByLocation) for quick aggregation.
-        /// </summary>
-        /// <returns>A dictionary ranking locations by their count of active reports (Highest Count first).</returns>
+
+        // --- Data Analysis / Utility Method ---
+
+        // Public method to calculate and return a ranking of provinces based on the count of active reports.
+        // Returns a Dictionary<string, int> where the key is the Province name and the value is the count.
         public Dictionary<string, int> GetLocationDensityRanking()
         {
-            // 1. Get all reports from the BST (sorted by Location for quick grouping)
+
+            // Step 1: Get all reports from the BST (sorted by Location, though sorting isn't strictly necessary for this operation).
             var allReports = GetReportsSortedByLocation();
 
-            // 2. Filter reports to count only 'Active' (Pending or In Progress) reports
+
+            // Step 2: Filter the reports to include only those with active statuses ("Pending" or "In Progress").
+            // Then, group the filtered reports by the 'Province' property.
+            // Finally, convert the grouping into a Dictionary where Key = Province, Value = Count of reports in that Province.
             var activeReportsByLocation = allReports
-                .Where(r => r.Status == "Pending" || r.Status == "In Progress")
-                .GroupBy(r => r.Province)
-                .ToDictionary(g => g.Key, g => g.Count());
+            .Where(r => r.Status == "Pending" || r.Status == "In Progress")
+            .GroupBy(r => r.Province)
+            .ToDictionary(g => g.Key, g => g.Count());
 
-            // 3. Rank the results (Highest Count first)
+
+            // Step 3: Order the dictionary entries (KeyValuePair) by the Count (Value) in descending order (highest count first).
+            // Convert the sorted sequence back into a Dictionary.
             var ranking = activeReportsByLocation
-                .OrderByDescending(kv => kv.Value)
-                .ToDictionary(kv => kv.Key, kv => kv.Value);
+            .OrderByDescending(kv => kv.Value)
+            .ToDictionary(kv => kv.Key, kv => kv.Value);
 
-            return ranking;
+            // Return the final ranked list of provinces and their active report counts.
+            return ranking;
         }
 
     }
