@@ -195,22 +195,13 @@ namespace IssueReportSystem
         /// <summary>
         /// CORE GRAPH ALGORITHM: Finds potential duplicate reports using graph relationships.
         /// 
-        /// Algorithm:
-        /// 1. Use Graph (BFS) to find all connected locations (nearby areas)
-        /// 2. Use BST to get all reports sorted for efficient access
-        /// 3. Filter reports by:
-        ///    - Same Category
-        ///    - Different User (to find duplicates by OTHER users)
-        ///    - Within ±12 hours time window
-        ///    - In connected locations (graph relationship)
-        /// 
         /// This combines multiple advanced data structures for meaningful analysis.
         /// </summary>
         private List<DuplicateReport> FindPotentialDuplicates(string location, string category, string userId)
         {
             var duplicates = new List<DuplicateReport>();       
 
-            // **STEP 2: Use BST to get all reports sorted by location**
+            //  Use BST to get all reports sorted by location**
             var allReports = ReportService.GetReportsSortedByLocation();
 
             // Find the current report to get its timestamp
@@ -223,7 +214,7 @@ namespace IssueReportSystem
 
             DateTime currentTime = currentReport.CreatedAt;
 
-            // **STEP 3: Find potential duplicates using Graph + Time analysis**
+            //  Find potential duplicates using Graph + Time analysis**
             foreach (var report in allReports)
             {
                 // Skip if same user (we want duplicates by DIFFERENT users)
@@ -233,7 +224,7 @@ namespace IssueReportSystem
                 // Check if same category
                 if (report.Category != category) continue;
 
-                // **STEP 4: Time-based comparison (±12 hours)**
+                // Time-based comparison (±12 hours)**
                 TimeSpan timeDifference = report.CreatedAt - currentTime;
                 double hoursDifference = Math.Abs(timeDifference.TotalHours);
 
@@ -364,6 +355,94 @@ namespace IssueReportSystem
             }
 
             MessageBox.Show(message, "Duplicate Reports Detected", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
+        /// <summary>
+        /// Retrieves the absolute highest priority report (the oldest overall) 
+        /// from the Min-Heap and displays it. This demonstrates the O(1) efficiency 
+        /// of the Heap for priority queue management.
+        /// </summary>
+        private void btnShowMyPriority_Click(object sender, EventArgs e)
+        {
+            // --- USE MIN-HEAP (O(1) retrieval) ---
+            // Note: We use Peek to show the priority item without removing it from the queue.
+            Report highestPriorityReport = ReportService.PeekHighestPriorityReport();
+
+            if (highestPriorityReport == null)
+            {
+                MessageBox.Show("There are no reports currently waiting for processing in the system's priority queue.", "System Priority",
+                                 MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            // Display the details of the highest priority report
+            MessageBox.Show(
+                $"SYSTEM'S HIGHEST PRIORITY REPORT:\n" +
+                $"This report is the oldest waiting issue in the system.\n\n" +
+                $"User ID: {highestPriorityReport.UserId}\n" +
+                $"Location: {highestPriorityReport.Location}\n" +
+                $"Category: {highestPriorityReport.Category}\n" +
+                $"Status: {highestPriorityReport.Status}\n" +
+                $"Submitted: {highestPriorityReport.CreatedAt:yyyy-MM-dd HH:mm}\n" +
+                $"Description: {highestPriorityReport.Description}",
+                "System Priority Report (Min-Heap Result)",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Exclamation);
+        }
+
+    
+        private void btnShowHotspots_Click(object sender, EventArgs e)
+        {
+            var ranking = ReportService.GetLocationDensityRanking();
+
+            if (ranking.Any())
+            {
+                var topProvince = ranking.First();
+                MessageBox.Show(
+                    $"The current active hotspot PROVINCE is **{topProvince.Key}** with **{topProvince.Value}** active reports!",
+                    "Report Density Hotspot: Province Ranking",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation);
+            }
+            else
+            {
+                MessageBox.Show("No active reports found in the system.", "Report Density Hotspot");
+            }
+        }
+
+        /// <summary>
+        /// Button 2 click event (Sort by Priority).
+        /// USES MIN-HEAP (Heap Sort): Retrieves all reports sorted by creation date (oldest first = highest priority).
+        /// </summary>
+        private void button2_Click(object sender, EventArgs e)
+        {
+            // **ADVANCED DATA STRUCTURE: Min-Heap (Heap Sort)**
+            var sortedReports = ReportService.GetReportsSortedByPriority();
+
+            if (sortedReports.Count == 0)
+            {
+                MessageBox.Show("The priority queue is empty. Please submit new reports to repopulate it.", "Priority Sort Empty", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            // Update the DataGridView with the newly sorted list
+            dataGridViewReports.DataSource = sortedReports
+                .Select(r => new
+                {
+                    r.UserId,
+                    r.Province,
+                    r.Category,
+                    r.Location,
+                    r.Description,
+                    r.Status,
+                    r.CreatedAt // Include CreatedAt to clearly show the sort order
+                })
+                .ToList();
+
+            MessageBox.Show("Reports have been sorted by **Priority** (Oldest issue first) using the Min-Heap.",
+                            "Priority Sort Complete",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
         }
     }
 }

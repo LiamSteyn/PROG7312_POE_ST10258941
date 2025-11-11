@@ -99,52 +99,6 @@ namespace IssueReportSystem.Services
         }
 
 
-        /// <summary>
-        /// Returns all reports in the order they were added.
-        /// </summary>
-        public static LinkedList<Report> GetReports()
-        {
-            return reports;
-        }
-
-        /// <summary>
-        /// Returns a FIFO queue of reports with "Pending" status.
-        /// </summary>
-        public static Queue<Report> GetPendingQueue()
-        {
-            return new Queue<Report>(pendingQueue);
-        }
-
-        /// <summary>
-        /// Returns all reports for a specific province and category.
-        /// If none exist, returns an empty linked list.
-        /// </summary>
-        public static LinkedList<Report> GetReportsByProvinceAndCategory(string province, string category)
-        {
-            if (reportsByProvinceAndCategory.ContainsKey(province) &&
-                reportsByProvinceAndCategory[province].ContainsKey(category))
-            {
-                return reportsByProvinceAndCategory[province][category];
-            }
-            return new LinkedList<Report>();
-        }
-
-        /// <summary>
-        /// Adds a report to the "recently viewed" stack.
-        /// Useful for showing last viewed reports (LIFO).
-        /// </summary>
-        public static void AddRecentReport(Report report)
-        {
-            recentReports.Push(report);
-        }
-
-        /// <summary>
-        /// Returns the last viewed report (LIFO) or null if none exist.
-        /// </summary>
-        public static Report GetLastViewedReport()
-        {
-            return recentReports.Count > 0 ? recentReports.Pop() : null;
-        }
 
         /// <summary>
         /// Exposes the full dictionary of reports organized by province and category.
@@ -181,16 +135,18 @@ namespace IssueReportSystem.Services
             
             var seededReports = new List<Report>
             {
-                new Report { UserId = "TEST_C", Province = "Western Cape", Category = "Road Damage", Location = "Claremont", Description = "Potholes on Main Street need urgent repair.", Status = "Pending", CreatedAt = DateTime.Now.AddHours(-10) },
-                new Report { UserId = "TEST_A", Province = "Western Cape", Category = "Road Damage", Location = "Claremont", Description = "Potholes on Main Street need urgent repair.", Status = "In Progress", CreatedAt = DateTime.Now.AddHours(-10) },
-                new Report { UserId = "TEST_B", Province = "Gauteng", Category = "Electrical", Location = "Soweto", Description = "Street lights not working along 5th Avenue.", Status = "Pending", CreatedAt = DateTime.Now.AddHours(-10) },
-                new Report { UserId = "TEST_A", Province = "KwaZulu-Natal", Category = "Other", Location = "Durban Central", Description = "Graffiti on public property needs cleanup.", Status = "Resolved", CreatedAt = DateTime.Now.AddHours(-10) },
+                new Report { UserId = "TEST_A", Province = "Western Cape", Category = "Road Damage", Location = "Claremont Street 2", Description = "Potholes on Main Street need urgent repair.", Status = "In Progress", CreatedAt = DateTime.Now.AddHours(-10) },
+                new Report { UserId = "TEST_B", Province = "Gauteng", Category = "Electrical", Location = "Soweto Street 1", Description = "Street lights not working along 5th Avenue.", Status = "Pending", CreatedAt = DateTime.Now.AddHours(-10) },
+                new Report { UserId = "TEST_A", Province = "KwaZulu-Natal", Category = "Other", Location = "Durban Central Street 2", Description = "Graffiti on public property needs cleanup.", Status = "Resolved", CreatedAt = DateTime.Now.AddHours(-10) },
                 new Report { UserId = "TEST_B", Province = "Eastern Cape", Category = "Road Damage", Location = "Port Elizabeth", Description = "Traffic signals malfunctioning at 3rd Street intersection.", Status = "Pending", CreatedAt = DateTime.Now.AddHours(-10) },
-                new Report { UserId = "TEST_A", Province = "Western Cape", Category = "Electrical", Location = "Woodstock", Description = "Power outage affecting multiple homes.", Status = "In Progress", CreatedAt = DateTime.Now.AddHours(-10) },
-                new Report { UserId = "TEST_B", Province = "Gauteng", Category = "Plumbing", Location = "Midrand", Description = "Leaking municipal water main in residential area.", Status = "Pending", CreatedAt = DateTime.Now.AddHours(-10) },
-                new Report { UserId = "TEST_A", Province = "Limpopo", Category = "Road Damage", Location = "Polokwane", Description = "Road shoulder collapsed near highway exit.", Status = "Pending", CreatedAt = DateTime.Now.AddHours(-10) },
-                new Report { UserId = "TEST_A", Province = "Western Cape", Category = "Other", Location = "Sea Point", Description = "Abandoned vehicle blocking parking bays.", Status = "Resolved", CreatedAt = DateTime.Now.AddHours(-10) },
-                new Report { UserId = "TEST_A", Province = "KwaZulu-Natal", Category = "Plumbing", Location = "Pietermaritzburg", Description = "Water supply issue in residential block.", Status = "Pending", CreatedAt = DateTime.Now.AddHours(-10) }
+                new Report { UserId = "TEST_C", Province = "Western Cape", Category = "Plumbing", Location = "Claremont Street 1", Description = "Water is currently off.", Status = "Pending", CreatedAt = DateTime.Now.AddHours(-8) },
+                new Report { UserId = "TEST_D", Province = "Western Cape", Category = "Electrical", Location = "Claremont Street 3", Description = "Electricity is currently off.", Status = "Pending", CreatedAt = DateTime.Now.AddHours(-8) },
+                new Report { UserId = "TEST_A", Province = "Western Cape", Category = "Electrical", Location = "Woodstock Street 2", Description = "Power outage affecting multiple homes.", Status = "In Progress", CreatedAt = DateTime.Now.AddHours(-10) },
+                new Report { UserId = "TEST_B", Province = "Gauteng", Category = "Plumbing", Location = "Midrand Street 1", Description = "Leaking municipal water main in residential area.", Status = "Pending", CreatedAt = DateTime.Now.AddHours(-10) },
+                new Report { UserId = "TEST_A", Province = "Limpopo", Category = "Road Damage", Location = "Polokwane Street 1", Description = "Road shoulder collapsed near highway exit.", Status = "Pending", CreatedAt = DateTime.Now.AddHours(-10) },
+                new Report { UserId = "TEST_A", Province = "Western Cape", Category = "Other", Location = "Sea Point Street 1", Description = "Abandoned vehicle blocking parking bays.", Status = "Resolved", CreatedAt = DateTime.Now.AddHours(-10) },
+                new Report { UserId = "TEST_A", Province = "KwaZulu-Natal", Category = "Plumbing", Location = "Pietermaritzburg Street 1", Description = "Water supply issue in residential block.", Status = "Pending", CreatedAt = DateTime.Now.AddHours(-12) },
+                new Report { UserId = "TEST_C", Province = "Western Cape", Category = "Road Damage", Location = "Claremont Street 2", Description = "Alot of potholes in the area.", Status = "Pending", CreatedAt = DateTime.Now.AddHours(-9) }
             };
 
             // Add seeded reports to all relevant data structures
@@ -198,6 +154,15 @@ namespace IssueReportSystem.Services
             {
                 AddReport(r);
             }
+        }
+
+        /// <summary>
+        /// Retrieves the single highest priority report (the oldest report) from the Min-Heap
+        /// without removing it. (O(1) time complexity).    
+        /// </summary>
+        public static Report PeekHighestPriorityReport()
+        {
+            return advancedService.PeekHighestPriorityReport();
         }
 
 
@@ -211,12 +176,12 @@ namespace IssueReportSystem.Services
         }
 
         /// <summary>
-        /// Retrieves and removes the single highest priority report (the oldest report) from the Min-Heap.
-        /// (Meets the "optimise the display of service request status" requirement via Heap)
+        /// Retrieves a ranking of locations based on the number of active reports, 
+        /// utilizing the AdvancedDataStructureService for analysis.
         /// </summary>
-        public static Report DequeueHighestPriorityReport()
+        public static Dictionary<string, int> GetLocationDensityRanking()
         {
-            return advancedService.DequeueHighestPriorityReport();
+            return advancedService.GetLocationDensityRanking();
         }
 
         /// <summary>
@@ -250,6 +215,34 @@ namespace IssueReportSystem.Services
             }
 
             return duplicateReports;
+        }
+
+        /// <summary>
+        /// Returns ALL reports sorted by priority (oldest first) using the Min-Heap (Heap Sort logic).
+        /// This demonstrates the full functionality of the Heap structure.
+        /// NOTE: This clears the internal priority queue. Callers should handle the temporary state change.
+        /// </summary>
+        public static List<Report> GetReportsSortedByPriority()
+        {
+            // Important: To do a full Heap Sort, we must dequeue all items.
+            // This temporarily empties the priority queue.
+            List<Report> sortedList = new List<Report>();
+
+            // O(n log n) operation
+            while (true)
+            {
+                // Call the service method to remove and return the highest priority report
+                Report nextReport = advancedService.DequeueHighestPriorityReport();
+
+                if (nextReport == null)
+                    break;
+
+                sortedList.Add(nextReport);
+            }
+
+            // In a production system, you would typically rebuild the heap afterward.
+            // For demonstration, we simply return the sorted list.
+            return sortedList;
         }
 
     }

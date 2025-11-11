@@ -218,50 +218,5 @@ namespace IssueReportSystem
         {
             this.Close(); // Close form when Back button is clicked
         }
-
-        /// <summary>
-        /// Shows the user their oldest pending report using the Min-Heap priority system.
-        /// This helps users understand which of their reports needs attention first.
-        /// </summary>
-        private void btnShowMyPriority_Click(object sender, EventArgs e)
-        {
-            string searchUserId = userIdTextBox.Text.Trim();
-
-            // Validate User ID
-            if (string.IsNullOrWhiteSpace(searchUserId) || searchUserId == "Enter User ID (e.g., TEST_A)")
-            {
-                MessageBox.Show("Please enter a User ID to check priority reports.", "Input Required",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            // Get all user reports
-            List<Report> userReports = ReportService.GetReportsByUserId(searchUserId);
-
-            if (!userReports.Any())
-            {
-                MessageBox.Show($"No reports found for User ID: {searchUserId}", "No Reports",
-                                MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
-            // Find the oldest report for this user (simulating priority)
-            var oldestReport = userReports.OrderBy(r => r.CreatedAt).FirstOrDefault();
-
-            if (oldestReport != null)
-            {
-                MessageBox.Show(
-                    $"Your Oldest (Highest Priority) Report:\n\n" +
-                    $"Location: {oldestReport.Location}\n" +
-                    $"Category: {oldestReport.Category}\n" +
-                    $"Status: {oldestReport.Status}\n" +
-                    $"Submitted: {oldestReport.CreatedAt:yyyy-MM-dd HH:mm}\n" +
-                    $"Description: {oldestReport.Description}\n\n" +
-                    $"This report has been pending the longest.",
-                    "Priority Report",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
-            }
-        }
     }
 }

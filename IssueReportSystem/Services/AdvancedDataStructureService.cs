@@ -29,6 +29,17 @@ namespace IssueReportSystem.Services
             }
         }
 
+        // --- Graph for Location Relationships ---
+        // Key: Location (Node), Value: List of connected locations (Edges)
+        private Dictionary<string, List<string>> _locationGraph = new Dictionary<string, List<string>>();
+
+        // Example method to set up connections (you would call this during seeding)
+        public void BuildLocationGraph(Dictionary<string, List<string>> connections)
+        {
+            // Loads connections from ReportService (or a config source)
+            _locationGraph = connections;
+        }
+
         private BstNode _reportBstRoot = null;
 
         public void AddReportToBst(Report report)
@@ -84,23 +95,6 @@ namespace IssueReportSystem.Services
             HeapifyUp(_priorityMinHeap.Count - 1);
         }
 
-        public Report DequeueHighestPriorityReport()
-        {
-            if (_priorityMinHeap.Count == 0) return null;
-
-            Report highPriority = _priorityMinHeap[0];
-            int lastIndex = _priorityMinHeap.Count - 1;
-            _priorityMinHeap[0] = _priorityMinHeap[lastIndex];
-            _priorityMinHeap.RemoveAt(lastIndex);
-
-            if (_priorityMinHeap.Count > 0)
-            {
-                HeapifyDown(0);
-            }
-
-            return highPriority;
-        }
-
         public Report PeekHighestPriorityReport()
         {
             return _priorityMinHeap.Count > 0 ? _priorityMinHeap[0] : null;
@@ -138,6 +132,61 @@ namespace IssueReportSystem.Services
                 (_priorityMinHeap[index], _priorityMinHeap[smallest]) = (_priorityMinHeap[smallest], _priorityMinHeap[index]);
                 HeapifyDown(smallest);
             }
+        }
+
+        /// <summary>
+        /// Removes and returns the highest priority report (the oldest) from the Min-Heap.
+        /// This operation takes O(log n) time complexity.
+        /// </summary>
+        public Report DequeueHighestPriorityReport()
+        {
+            if (_priorityMinHeap.Count == 0)
+            {
+                return null;
+            }
+
+            // 1. Get the root (highest priority element)
+            Report highestPriority = _priorityMinHeap[0];
+
+            // 2. Replace the root with the last element
+            int lastIndex = _priorityMinHeap.Count - 1;
+            _priorityMinHeap[0] = _priorityMinHeap[lastIndex];
+
+            // 3. Remove the last element
+            _priorityMinHeap.RemoveAt(lastIndex);
+
+            // 4. Re-heapify the structure (push the new root down)
+            if (_priorityMinHeap.Count > 0)
+            {
+                HeapifyDown(0);
+            }
+
+            return highestPriority;
+        }
+
+
+        /// <summary>
+        /// Calculates which locations have the highest count of active (Pending/In Progress) reports.
+        /// This method uses the results of the BST (GetReportsSortedByLocation) for quick aggregation.
+        /// </summary>
+        /// <returns>A dictionary ranking locations by their count of active reports (Highest Count first).</returns>
+        public Dictionary<string, int> GetLocationDensityRanking()
+        {
+            // 1. Get all reports from the BST (sorted by Location for quick grouping)
+            var allReports = GetReportsSortedByLocation();
+
+            // 2. Filter reports to count only 'Active' (Pending or In Progress) reports
+            var activeReportsByLocation = allReports
+                .Where(r => r.Status == "Pending" || r.Status == "In Progress")
+                .GroupBy(r => r.Province)
+                .ToDictionary(g => g.Key, g => g.Count());
+
+            // 3. Rank the results (Highest Count first)
+            var ranking = activeReportsByLocation
+                .OrderByDescending(kv => kv.Value)
+                .ToDictionary(kv => kv.Key, kv => kv.Value);
+
+            return ranking;
         }
 
     }

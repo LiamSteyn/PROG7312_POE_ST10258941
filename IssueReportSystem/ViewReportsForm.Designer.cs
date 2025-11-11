@@ -40,6 +40,10 @@
             this.button1 = new System.Windows.Forms.Button();
             this.btnBack = new System.Windows.Forms.Button();
             this.btnDetectDuplicates = new System.Windows.Forms.Button();
+            this.btnShowMyPriority = new System.Windows.Forms.Button();
+            this.btnShowHotspots = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.label7 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewReports)).BeginInit();
             this.SuspendLayout();
             // 
@@ -164,7 +168,7 @@
             // 
             // btnDetectDuplicates
             // 
-            this.btnDetectDuplicates.Location = new System.Drawing.Point(12, 395);
+            this.btnDetectDuplicates.Location = new System.Drawing.Point(12, 474);
             this.btnDetectDuplicates.Name = "btnDetectDuplicates";
             this.btnDetectDuplicates.Size = new System.Drawing.Size(91, 23);
             this.btnDetectDuplicates.TabIndex = 11;
@@ -172,11 +176,56 @@
             this.btnDetectDuplicates.UseVisualStyleBackColor = true;
             this.btnDetectDuplicates.Click += new System.EventHandler(this.btnDetectDuplicates_Click);
             // 
+            // btnShowMyPriority
+            // 
+            this.btnShowMyPriority.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnShowMyPriority.Location = new System.Drawing.Point(234, 474);
+            this.btnShowMyPriority.Name = "btnShowMyPriority";
+            this.btnShowMyPriority.Size = new System.Drawing.Size(108, 23);
+            this.btnShowMyPriority.TabIndex = 25;
+            this.btnShowMyPriority.Text = "Next In-line Report";
+            this.btnShowMyPriority.UseVisualStyleBackColor = true;
+            this.btnShowMyPriority.Click += new System.EventHandler(this.btnShowMyPriority_Click);
+            // 
+            // btnShowHotspots
+            // 
+            this.btnShowHotspots.Location = new System.Drawing.Point(120, 474);
+            this.btnShowHotspots.Name = "btnShowHotspots";
+            this.btnShowHotspots.Size = new System.Drawing.Size(95, 23);
+            this.btnShowHotspots.TabIndex = 26;
+            this.btnShowHotspots.Text = "Report Hotspots";
+            this.btnShowHotspots.UseVisualStyleBackColor = true;
+            this.btnShowHotspots.Click += new System.EventHandler(this.btnShowHotspots_Click);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(12, 395);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(73, 22);
+            this.button2.TabIndex = 27;
+            this.button2.Text = "Priority Sort";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Segoe UI", 10.25F);
+            this.label7.Location = new System.Drawing.Point(13, 442);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(72, 19);
+            this.label7.TabIndex = 28;
+            this.label7.Text = "Exta Tools:";
+            // 
             // ViewReportsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(431, 427);
+            this.ClientSize = new System.Drawing.Size(431, 509);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.btnShowHotspots);
+            this.Controls.Add(this.btnShowMyPriority);
             this.Controls.Add(this.btnDetectDuplicates);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label6);
@@ -212,5 +261,9 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button btnDetectDuplicates;
+        private System.Windows.Forms.Button btnShowMyPriority;
+        private System.Windows.Forms.Button btnShowHotspots;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Label label7;
     }
 }

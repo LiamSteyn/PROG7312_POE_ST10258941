@@ -37,7 +37,6 @@
             this.userIdTextBox = new System.Windows.Forms.TextBox();
             this.statusFilterDropdown = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
-            this.btnShowMyPriority = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewStatus)).BeginInit();
             this.SuspendLayout();
@@ -47,7 +46,7 @@
             this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 83.49056F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.50943F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 460F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 461F));
             this.tableLayoutPanel1.Controls.Add(this.btnBack, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.label1, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.dataGridViewStatus, 0, 5);
@@ -56,7 +55,6 @@
             this.tableLayoutPanel1.Controls.Add(this.userIdTextBox, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.statusFilterDropdown, 0, 4);
             this.tableLayoutPanel1.Controls.Add(this.button1, 1, 2);
-            this.tableLayoutPanel1.Controls.Add(this.btnShowMyPriority, 2, 4);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -162,22 +160,11 @@
             // 
             this.button1.Location = new System.Drawing.Point(286, 89);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(50, 23);
+            this.button1.Size = new System.Drawing.Size(49, 23);
             this.button1.TabIndex = 11;
             this.button1.Text = "Search";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // btnShowMyPriority
-            // 
-            this.btnShowMyPriority.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnShowMyPriority.Location = new System.Drawing.Point(672, 147);
-            this.btnShowMyPriority.Name = "btnShowMyPriority";
-            this.btnShowMyPriority.Size = new System.Drawing.Size(125, 23);
-            this.btnShowMyPriority.TabIndex = 24;
-            this.btnShowMyPriority.Text = "Next In-line Report";
-            this.btnShowMyPriority.UseVisualStyleBackColor = true;
-            this.btnShowMyPriority.Click += new System.EventHandler(this.btnShowMyPriority_Click);
             // 
             // StatusTrackerForm
             // 
@@ -205,6 +192,5 @@
         private System.Windows.Forms.DataGridView dataGridViewStatus;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnBack;
-        private System.Windows.Forms.Button btnShowMyPriority;
     }
 }
