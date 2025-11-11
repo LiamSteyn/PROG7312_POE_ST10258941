@@ -220,18 +220,20 @@ namespace IssueReportSystem.Services
         /// <summary>
         /// Returns ALL reports sorted by priority (oldest first) using the Min-Heap (Heap Sort logic).
         /// This demonstrates the full functionality of the Heap structure.
-        /// NOTE: This clears the internal priority queue. Callers should handle the temporary state change.
+        /// NOTE: This clears the internal priority queue, but it is then IMMEDIATELY rebuilt.
         /// </summary>
         public static List<Report> GetReportsSortedByPriority()
         {
-            // Important: To do a full Heap Sort, we must dequeue all items.
-            // This temporarily empties the priority queue.
             List<Report> sortedList = new List<Report>();
 
-            // O(n log n) operation
+            // 1. Store the reports needed for REBUILDING THE HEAP after the sort.
+            // The heap will be empty after the loop below runs.
+            List<Report> reportsToRebuild = advancedService.GetAllReportsFromHeap();
+
+            // 2. Dequeue all reports into the sorted list (O(n log n))
+            // This empties the heap.
             while (true)
             {
-                // Call the service method to remove and return the highest priority report
                 Report nextReport = advancedService.DequeueHighestPriorityReport();
 
                 if (nextReport == null)
@@ -240,8 +242,13 @@ namespace IssueReportSystem.Services
                 sortedList.Add(nextReport);
             }
 
-            // In a production system, you would typically rebuild the heap afterward.
-            // For demonstration, we simply return the sorted list.
+            // 3. Rebuild the heap by re-enqueuing all reports. (O(n log n))
+            // Use the list we saved in step 1.
+            foreach (var report in reportsToRebuild)
+            {
+                advancedService.EnqueueReportByPriority(report);
+            }
+
             return sortedList;
         }
 

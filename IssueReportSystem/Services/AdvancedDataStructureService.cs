@@ -40,6 +40,16 @@ namespace IssueReportSystem.Services
             _locationGraph = connections;
         }
 
+        /// <summary>
+        /// Returns a list containing all reports currently in the Min-Heap.
+        /// This is used primarily for rebuilding the heap after a full sort operation.
+        /// </summary>
+        public List<Report> GetAllReportsFromHeap()
+        {
+            // Return a copy of the list to prevent external modification of the heap structure
+            return new List<Report>(_priorityMinHeap);
+        }
+
         private BstNode _reportBstRoot = null;
 
         public void AddReportToBst(Report report)
