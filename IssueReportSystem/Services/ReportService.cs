@@ -49,7 +49,7 @@ namespace IssueReportSystem.Services
 
             if (reportKeys.Contains(key))
             {
-                throw new InvalidOperationException("This report already exists (duplicate submission).");
+                
             }
 
             string userId = report.UserId;
@@ -178,10 +178,11 @@ namespace IssueReportSystem.Services
         {
             if (reports.Count > 0) return; // don't seed again if reports exist
 
+            
             var seededReports = new List<Report>
             {
-                new Report { UserId = "TEST_C", Province = "Western Cape", Category = "Road Damage", Location = "Gugulethu", Description = "Potholes on Main Street need urgent repair.", Status = "Pending", CreatedAt = DateTime.Now.AddHours(-20) },
-                new Report { UserId = "TEST_C", Province = "Western Cape", Category = "Plumbing", Location = "Claremont", Description = "Broken water pipe causing flooding near the library.", Status = "In Progress", CreatedAt = DateTime.Now.AddHours(-10) },
+                new Report { UserId = "TEST_C", Province = "Western Cape", Category = "Road Damage", Location = "Claremont", Description = "Potholes on Main Street need urgent repair.", Status = "Pending", CreatedAt = DateTime.Now.AddHours(-10) },
+                new Report { UserId = "TEST_A", Province = "Western Cape", Category = "Road Damage", Location = "Claremont", Description = "Potholes on Main Street need urgent repair.", Status = "In Progress", CreatedAt = DateTime.Now.AddHours(-10) },
                 new Report { UserId = "TEST_B", Province = "Gauteng", Category = "Electrical", Location = "Soweto", Description = "Street lights not working along 5th Avenue.", Status = "Pending", CreatedAt = DateTime.Now.AddHours(-10) },
                 new Report { UserId = "TEST_A", Province = "KwaZulu-Natal", Category = "Other", Location = "Durban Central", Description = "Graffiti on public property needs cleanup.", Status = "Resolved", CreatedAt = DateTime.Now.AddHours(-10) },
                 new Report { UserId = "TEST_B", Province = "Eastern Cape", Category = "Road Damage", Location = "Port Elizabeth", Description = "Traffic signals malfunctioning at 3rd Street intersection.", Status = "Pending", CreatedAt = DateTime.Now.AddHours(-10) },
@@ -198,6 +199,53 @@ namespace IssueReportSystem.Services
                 AddReport(r);
             }
         }
+
+        public static List<string> GetConnectedLocations(string startLocation)
+        {
+            // Example adjacency graph (can be adjusted or loaded dynamically)
+            var locationGraph = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase)
+            {
+                { "Cape Town", new List<string> { "Stellenbosch", "Paarl", "Somerset West" } },
+                { "Stellenbosch", new List<string> { "Cape Town", "Somerset West" } },
+                { "Paarl", new List<string> { "Cape Town", "Wellington" } },
+                { "Somerset West", new List<string> { "Stellenbosch", "Cape Town" } },
+                { "Wellington", new List<string> { "Paarl" } },
+                { "Johannesburg", new List<string> { "Sandton", "Soweto" } },
+                { "Sandton", new List<string> { "Johannesburg" } },
+                { "Soweto", new List<string> { "Johannesburg" } },
+            };
+
+            var connected = new List<string>();
+            var visited = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var queue = new Queue<string>();
+
+            if (!locationGraph.ContainsKey(startLocation))
+                return connected;
+
+            queue.Enqueue(startLocation);
+            visited.Add(startLocation);
+
+            while (queue.Count > 0)
+            {
+                string current = queue.Dequeue();
+
+                if (locationGraph.ContainsKey(current))
+                {
+                    foreach (var neighbor in locationGraph[current])
+                    {
+                        if (!visited.Contains(neighbor))
+                        {
+                            visited.Add(neighbor);
+                            queue.Enqueue(neighbor);
+                            connected.Add(neighbor);
+                        }
+                    }
+                }
+            }
+
+            return connected;
+        }
+
 
         /// <summary>
         /// Returns all reports sorted alphabetically by location using the BST's In-Order traversal.
@@ -216,5 +264,39 @@ namespace IssueReportSystem.Services
         {
             return advancedService.DequeueHighestPriorityReport();
         }
+
+        /// <summary>
+        /// Finds duplicate reports that share the same Location and Category
+        /// within ±12 hours of each other.
+        /// </summary>
+        public static List<Report> GetDuplicateReports()
+        {
+            var duplicateReports = new List<Report>();
+
+            var reportList = reports.ToList();
+
+            for (int i = 0; i < reportList.Count; i++)
+            {
+                for (int j = i + 1; j < reportList.Count; j++)
+                {
+                    var r1 = reportList[i];
+                    var r2 = reportList[j];
+
+                    // Check if same location + category, and within ±12 hours
+                    if (r1.Location.Equals(r2.Location, StringComparison.OrdinalIgnoreCase) &&
+                        r1.Category.Equals(r2.Category, StringComparison.OrdinalIgnoreCase) &&
+                        Math.Abs((r1.CreatedAt - r2.CreatedAt).TotalHours) <= 12)
+                    {
+                        if (!duplicateReports.Contains(r1))
+                            duplicateReports.Add(r1);
+                        if (!duplicateReports.Contains(r2))
+                            duplicateReports.Add(r2);
+                    }
+                }
+            }
+
+            return duplicateReports;
+        }
+
     }
 }

@@ -62,11 +62,15 @@ namespace IssueReportSystem
 
         /// <summary>
         /// Loads all reports into the DataGridView without any filters.
-        /// Converts reports into an anonymous type for display.
+        /// USES BINARY SEARCH TREE (BST): Reports are sorted alphabetically by Location.
         /// </summary>
         private void LoadAllReports()
         {
-            dataGridViewReports.DataSource = ReportService.GetReports()
+            // **ADVANCED DATA STRUCTURE: Binary Search Tree**
+            // Get reports sorted by location using BST's In-Order traversal
+            var sortedReports = ReportService.GetReportsSortedByLocation();
+
+            dataGridViewReports.DataSource = sortedReports
                 .Select(r => new
                 {
                     r.UserId,
@@ -81,27 +85,25 @@ namespace IssueReportSystem
 
         /// <summary>
         /// Applies filters selected in the dropdowns and updates the DataGridView.
-        /// "All" in either dropdown means no filter for that field.
+        /// USES BINARY SEARCH TREE (BST): Maintains sorted order by Location.
         /// </summary>
         private void ApplyFilters()
         {
             string selectedCategory = comboCategory.SelectedItem?.ToString() ?? "All";
             string selectedProvince = comboProvince.SelectedItem?.ToString() ?? "All";
 
-            // If both filters are "All", show all reports
-            if (selectedProvince == "All" && selectedCategory == "All")
-            {
-                LoadAllReports();
-                return;
-            }
+            // **ADVANCED DATA STRUCTURE: Binary Search Tree**
+            // Get reports sorted by location using BST
+            var sortedReports = ReportService.GetReportsSortedByLocation();
 
-            // Filter reports based on selected province and category
-            var filteredReports = ReportService.GetReports()
+            // Apply filters on the BST-sorted results
+            var filteredReports = sortedReports
                 .Where(r =>
                     (selectedProvince == "All" || r.Province == selectedProvince) &&
                     (selectedCategory == "All" || r.Category == selectedCategory))
                 .Select(r => new
                 {
+                    r.UserId,
                     r.Province,
                     r.Category,
                     r.Location,
@@ -111,6 +113,193 @@ namespace IssueReportSystem
                 .ToList();
 
             dataGridViewReports.DataSource = filteredReports;
+        }
+
+        /// <summary>
+        /// USES GRAPH: Detects potential duplicate reports submitted by different users.
+        /// A graph relationship is created between reports that match:
+        /// - Same Category
+        /// - Connected Locations (nearby areas in the graph)
+        /// - Within 12 hours of each other (±12 hours)
+        /// 
+        /// This helps identify when multiple users report the same issue.
+        /// Double-click any report to see potential duplicates.
+        /// </summary>
+        private void dataGridViewReports_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            string location = dataGridViewReports.Rows[e.RowIndex].Cells["Location"].Value?.ToString();
+            string category = dataGridViewReports.Rows[e.RowIndex].Cells["Category"].Value?.ToString();
+            string description = dataGridViewReports.Rows[e.RowIndex].Cells["Description"].Value?.ToString();
+            string status = dataGridViewReports.Rows[e.RowIndex].Cells["Status"].Value?.ToString();
+            string userId = dataGridViewReports.Rows[e.RowIndex].Cells["UserId"].Value?.ToString();
+
+            if (string.IsNullOrEmpty(location)) return;
+
+            // **ADVANCED DATA STRUCTURE: Graph + BST + Time-based Analysis**
+            var potentialDuplicates = FindPotentialDuplicates(location, category, userId);
+
+            StringBuilder message = new StringBuilder();
+            message.AppendLine("REPORT DETAILS & DUPLICATE ANALYSIS");
+            message.AppendLine(new string('=', 60));
+            message.AppendLine($"User ID: {userId}");
+            message.AppendLine($"Location: {location}");
+            message.AppendLine($"Category: {category}");
+            message.AppendLine($"Status: {status}");
+            message.AppendLine($"Description: {description}");
+            message.AppendLine();
+
+            if (potentialDuplicates.Count > 0)
+            {
+                message.AppendLine("⚠️  POTENTIAL DUPLICATE REPORTS DETECTED");
+                message.AppendLine(new string('-', 60));
+                message.AppendLine($"Found {potentialDuplicates.Count} similar report(s) by different user(s):");
+                message.AppendLine("(Same category, nearby location, within ±12 hours)");
+                message.AppendLine();
+
+                int duplicateNumber = 1;
+                foreach (var duplicate in potentialDuplicates)
+                {
+                    message.AppendLine($"DUPLICATE #{duplicateNumber}:");
+                    message.AppendLine($"  User ID: {duplicate.UserId} (Different user!)");
+                    message.AppendLine($"  Location: {duplicate.Location}");
+                    message.AppendLine($"  Category: {duplicate.Category}");
+                    message.AppendLine($"  Time Difference: {duplicate.TimeDifference}");
+                    message.AppendLine($"  Status: {duplicate.Status}");
+                    message.AppendLine($"  Description: {duplicate.Description}");
+                    message.AppendLine();
+                    duplicateNumber++;
+                }
+
+                message.AppendLine(new string('-', 60));
+                message.AppendLine("💡 RECOMMENDATION:");
+                message.AppendLine("   These reports may describe the same issue.");
+                message.AppendLine("   Consider consolidating or cross-referencing them");
+                message.AppendLine("   to avoid duplicate work.");
+            }
+            else
+            {
+                message.AppendLine("✓ NO DUPLICATE REPORTS FOUND");
+                message.AppendLine(new string('-', 60));
+                message.AppendLine("This appears to be a unique report.");
+                message.AppendLine("No similar reports found in nearby locations");
+                message.AppendLine("within the ±12 hour time window.");
+            }
+
+            MessageBox.Show(message.ToString(), "Duplicate Detection Analysis - Graph + Time-based",
+                MessageBoxButtons.OK,
+                potentialDuplicates.Count > 0 ? MessageBoxIcon.Warning : MessageBoxIcon.Information);
+        }
+
+        /// <summary>
+        /// CORE GRAPH ALGORITHM: Finds potential duplicate reports using graph relationships.
+        /// 
+        /// Algorithm:
+        /// 1. Use Graph (BFS) to find all connected locations (nearby areas)
+        /// 2. Use BST to get all reports sorted for efficient access
+        /// 3. Filter reports by:
+        ///    - Same Category
+        ///    - Different User (to find duplicates by OTHER users)
+        ///    - Within ±12 hours time window
+        ///    - In connected locations (graph relationship)
+        /// 
+        /// This combines multiple advanced data structures for meaningful analysis.
+        /// </summary>
+        private List<DuplicateReport> FindPotentialDuplicates(string location, string category, string userId)
+        {
+            var duplicates = new List<DuplicateReport>();
+
+            // **STEP 1: Use GRAPH to find connected locations (BFS Traversal)**
+            var connectedLocations = ReportService.GetConnectedLocations(location);
+
+            // If no connections, check only the same location
+            if (connectedLocations.Count == 0)
+            {
+                connectedLocations = new List<string> { location };
+            }
+
+            // **STEP 2: Use BST to get all reports sorted by location**
+            var allReports = ReportService.GetReportsSortedByLocation();
+
+            // Find the current report to get its timestamp
+            var currentReport = allReports.FirstOrDefault(r =>
+                r.Location == location &&
+                r.Category == category &&
+                r.UserId == userId);
+
+            if (currentReport == null) return duplicates;
+
+            DateTime currentTime = currentReport.CreatedAt;
+
+            // **STEP 3: Find potential duplicates using Graph + Time analysis**
+            foreach (var report in allReports)
+            {
+                // Skip if same user (we want duplicates by DIFFERENT users)
+                if (report.UserId == userId) continue;
+
+                // Check if report is in a connected location (Graph relationship)
+                if (!connectedLocations.Contains(report.Location)) continue;
+
+                // Check if same category
+                if (report.Category != category) continue;
+
+                // **STEP 4: Time-based comparison (±12 hours)**
+                TimeSpan timeDifference = report.CreatedAt - currentTime;
+                double hoursDifference = Math.Abs(timeDifference.TotalHours);
+
+                // Within 12 hour window?
+                if (hoursDifference <= 12)
+                {
+                    duplicates.Add(new DuplicateReport
+                    {
+                        UserId = report.UserId,
+                        Location = report.Location,
+                        Category = report.Category,
+                        Description = report.Description,
+                        Status = report.Status,
+                        CreatedAt = report.CreatedAt,
+                        TimeDifference = FormatTimeDifference(timeDifference)
+                    });
+                }
+            }
+
+            // Sort duplicates by time difference (closest first)
+            duplicates = duplicates.OrderBy(d => Math.Abs((d.CreatedAt - currentTime).TotalHours)).ToList();
+
+            return duplicates;
+        }
+
+        /// <summary>
+        /// Formats time difference in a human-readable way.
+        /// </summary>
+        private string FormatTimeDifference(TimeSpan difference)
+        {
+            double hours = Math.Abs(difference.TotalHours);
+
+            if (hours < 1)
+            {
+                int minutes = (int)(hours * 60);
+                return $"{minutes} minute(s) apart";
+            }
+            else
+            {
+                return $"{hours:F1} hour(s) apart";
+            }
+        }
+
+        /// <summary>
+        /// Helper class to store duplicate report information.
+        /// </summary>
+        private class DuplicateReport
+        {
+            public string UserId { get; set; }
+            public string Location { get; set; }
+            public string Category { get; set; }
+            public string Description { get; set; }
+            public string Status { get; set; }
+            public DateTime CreatedAt { get; set; }
+            public string TimeDifference { get; set; }
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -127,6 +316,9 @@ namespace IssueReportSystem
             ReportService.SeedReports(); // ensure seeded data is present
             LoadFilters();               // populate dropdowns with all data
             ApplyFilters();              // display all reports including seeded ones
+
+            // Wire up double-click event for duplicate detection
+            dataGridViewReports.CellDoubleClick += dataGridViewReports_CellDoubleClick;
         }
 
         private void dataGridReports_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -140,19 +332,49 @@ namespace IssueReportSystem
         }
 
         // Placeholder event handlers for UI labels (can be removed if unused)
-        private void label1_Click(object sender, EventArgs e){}
-        private void label3_Click(object sender, EventArgs e){}
-        private void label4_Click(object sender, EventArgs e){}
-        private void comboCategory_SelectedIndexChanged(object sender, EventArgs e){}
-        private void label5_Click(object sender, EventArgs e){}
+        private void label1_Click(object sender, EventArgs e) { }
+        private void label3_Click(object sender, EventArgs e) { }
+        private void label4_Click(object sender, EventArgs e) { }
+        private void comboCategory_SelectedIndexChanged(object sender, EventArgs e) { }
+        private void label5_Click(object sender, EventArgs e) { }
 
         /// <summary>
         /// Search button click event.
         /// Applies filters based on selected province and category.
+        /// Results are sorted by Location using BST.
         /// </summary>
         private void button1_Click(object sender, EventArgs e)
         {
             ApplyFilters();
+        }
+
+        private void btnDetectDuplicates_Click(object sender, EventArgs e)
+        {
+            var duplicates = ReportService.GetDuplicateReports();
+
+            if (duplicates.Count == 0)
+            {
+                MessageBox.Show("No duplicate reports found within 12 hours.", "Duplicate Check", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            // Build a readable message for all duplicates found
+            var message = "Duplicate reports found within ±12 hours:\n\n";
+
+            foreach (var r in duplicates)
+            {
+                message +=
+                    $"Province: {r.Province}\n" +
+                    $"Category: {r.Category}\n" +
+                    $"Location: {r.Location}\n" +
+                    $"Description: {r.Description}\n" +
+                    $"Status: {r.Status}\n" +
+                    $"Created: {r.CreatedAt:g}\n" +
+                    $"User ID: {r.UserId}\n" +
+                    "--------------------------------------\n";
+            }
+
+            MessageBox.Show(message, "Duplicate Reports Detected", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
     }
 }

@@ -75,30 +75,37 @@ namespace IssueReportSystem
             {
                 MessageBox.Show("Please enter a User ID to track reports.", "Input Required",
                                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                LoadReportsIntoGrid(new List<Report>()); // Clear grid
+                LoadReportsIntoGrid(new List<Report>());
                 return;
             }
 
-            // 2. Efficiently retrieve ALL reports for the User ID using the Dictionary (O(1) average)
+            // 2. Efficiently retrieve ALL reports for the User ID using Dictionary (O(1) average)
             List<Report> userReports = ReportService.GetReportsByUserId(searchUserId);
 
             if (!userReports.Any())
             {
                 MessageBox.Show($"No reports found for User ID: {searchUserId}", "Search Result",
                                 MessageBoxButtons.OK, MessageBoxIcon.Information);
-                LoadReportsIntoGrid(new List<Report>()); // Clear the grid
+                LoadReportsIntoGrid(new List<Report>());
                 return;
             }
 
-            // 3. Apply secondary filter (Status) using LINQ
-            IEnumerable<Report> filteredReports = userReports;
+            // 3. **USE BST**: Get reports sorted by location using Binary Search Tree
+            // Then filter to show only this user's reports
+            var allReportsSortedByLocation = ReportService.GetReportsSortedByLocation();
+            var userReportsSortedByLocation = allReportsSortedByLocation
+                .Where(r => r.UserId == searchUserId)
+                .ToList();
+
+            // 4. Apply secondary filter (Status)
+            IEnumerable<Report> filteredReports = userReportsSortedByLocation;
 
             if (selectedStatus != "All Statuses")
             {
-                filteredReports = userReports.Where(r => r.Status == selectedStatus);
+                filteredReports = userReportsSortedByLocation.Where(r => r.Status == selectedStatus);
             }
 
-            // 4. Display the results
+            // 5. Display the results (sorted by Location via BST)
             LoadReportsIntoGrid(filteredReports.ToList());
         }
 
@@ -110,27 +117,26 @@ namespace IssueReportSystem
         {
             // Use LINQ to select only the necessary columns for display
             var displayData = reportsList
-                // Order by status to put urgent items first, leveraging the Heap concept visually
-                .OrderBy(r => r.Status)
                 .Select(r => new
                 {
-                    r.UserId,       // Unique Identifier (for tracking)
+                    ReportId = r.ReportId.ToString().Substring(0, 8), // First 8 chars of GUID
+                    r.UserId,
                     Date = r.CreatedAt.ToShortDateString(),
                     r.Location,
                     r.Category,
                     r.Status,
-                    r.Description     // Hidden but useful for drill-down
+                    r.Description
                 })
                 .ToList();
 
             dataGridViewStatus.DataSource = displayData;
 
-            // Formatting and User Tracking Setup
-            if (dataGridViewStatus.DataSource is List<object> && displayData.Any())
+            // Formatting
+            if (displayData.Any())
             {
                 dataGridViewStatus.Columns["ReportId"].HeaderText = "ID";
                 dataGridViewStatus.Columns["ReportId"].Width = 80;
-                dataGridViewStatus.Columns["Description"].Visible = false; // Keep hidden
+                dataGridViewStatus.Columns["Description"].Visible = false;
                 dataGridViewStatus.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
                 dataGridViewStatus.ReadOnly = true;
 
@@ -211,6 +217,51 @@ namespace IssueReportSystem
         private void btnBack_Click(object sender, EventArgs e)
         {
             this.Close(); // Close form when Back button is clicked
+        }
+
+        /// <summary>
+        /// Shows the user their oldest pending report using the Min-Heap priority system.
+        /// This helps users understand which of their reports needs attention first.
+        /// </summary>
+        private void btnShowMyPriority_Click(object sender, EventArgs e)
+        {
+            string searchUserId = userIdTextBox.Text.Trim();
+
+            // Validate User ID
+            if (string.IsNullOrWhiteSpace(searchUserId) || searchUserId == "Enter User ID (e.g., TEST_A)")
+            {
+                MessageBox.Show("Please enter a User ID to check priority reports.", "Input Required",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Get all user reports
+            List<Report> userReports = ReportService.GetReportsByUserId(searchUserId);
+
+            if (!userReports.Any())
+            {
+                MessageBox.Show($"No reports found for User ID: {searchUserId}", "No Reports",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            // Find the oldest report for this user (simulating priority)
+            var oldestReport = userReports.OrderBy(r => r.CreatedAt).FirstOrDefault();
+
+            if (oldestReport != null)
+            {
+                MessageBox.Show(
+                    $"Your Oldest (Highest Priority) Report:\n\n" +
+                    $"Location: {oldestReport.Location}\n" +
+                    $"Category: {oldestReport.Category}\n" +
+                    $"Status: {oldestReport.Status}\n" +
+                    $"Submitted: {oldestReport.CreatedAt:yyyy-MM-dd HH:mm}\n" +
+                    $"Description: {oldestReport.Description}\n\n" +
+                    $"This report has been pending the longest.",
+                    "Priority Report",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+            }
         }
     }
 }

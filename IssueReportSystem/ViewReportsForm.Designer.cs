@@ -39,6 +39,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.btnBack = new System.Windows.Forms.Button();
+            this.btnDetectDuplicates = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewReports)).BeginInit();
             this.SuspendLayout();
             // 
@@ -161,11 +162,22 @@
             this.btnBack.UseVisualStyleBackColor = true;
             this.btnBack.Click += new System.EventHandler(this.btnBack_Click);
             // 
+            // btnDetectDuplicates
+            // 
+            this.btnDetectDuplicates.Location = new System.Drawing.Point(12, 395);
+            this.btnDetectDuplicates.Name = "btnDetectDuplicates";
+            this.btnDetectDuplicates.Size = new System.Drawing.Size(91, 23);
+            this.btnDetectDuplicates.TabIndex = 11;
+            this.btnDetectDuplicates.Text = "Duplicates";
+            this.btnDetectDuplicates.UseVisualStyleBackColor = true;
+            this.btnDetectDuplicates.Click += new System.EventHandler(this.btnDetectDuplicates_Click);
+            // 
             // ViewReportsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(431, 418);
+            this.ClientSize = new System.Drawing.Size(431, 427);
+            this.Controls.Add(this.btnDetectDuplicates);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
@@ -199,5 +211,6 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnDetectDuplicates;
     }
 }
