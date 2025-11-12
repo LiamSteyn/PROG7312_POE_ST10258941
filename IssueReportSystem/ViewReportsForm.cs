@@ -444,5 +444,72 @@ namespace IssueReportSystem
                             MessageBoxButtons.OK,
                             MessageBoxIcon.Information);
         }
+
+        private void btnGraphReport_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Show a loading message or cursor
+                this.Cursor = Cursors.WaitCursor;
+
+                // Calculate probabilities using the graph-based algorithm
+                var probabilities = ReportService.CalculateFutureReportProbabilities();
+
+                // Display in a MessageBox (Simple)
+                DisplayProbabilitiesInMessageBox(probabilities);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error calculating probabilities: {ex.Message}",
+                                "Error",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+            }
+            finally
+            {
+                // Restore cursor
+                this.Cursor = Cursors.Default;
+            }
+        }
+
+        // Option 1: Simple MessageBox display
+        private void DisplayProbabilitiesInMessageBox(Dictionary<string, double> probabilities)
+        {
+            if (probabilities.Count == 0)
+            {
+                MessageBox.Show("No data available to calculate probabilities.",
+                                "Graph Analysis",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
+                return;
+            }
+
+            // Build the message string
+            StringBuilder message = new StringBuilder();
+            message.AppendLine("FUTURE REPORT PROBABILITY BY PROVINCE");
+            message.AppendLine("(Based on Graph Analysis)");
+            message.AppendLine(new string('=', 50));
+            message.AppendLine();
+
+            // Sort by probability (highest first)
+            var sortedProvinces = probabilities
+                .OrderByDescending(kv => kv.Value)
+                .ToList();
+
+            foreach (var province in sortedProvinces)
+            {
+                // Create a visual bar using characters
+                int barLength = (int)(province.Value / 5); // Scale to ~20 chars max
+                string bar = new string('█', barLength);
+
+                message.AppendLine($"{province.Key,-20} {province.Value,6:F2}% {bar}");
+            }
+
+            MessageBox.Show(message.ToString(),
+                            "Province Report Probability",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
+        }
     }
 }

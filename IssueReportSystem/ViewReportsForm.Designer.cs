@@ -44,6 +44,7 @@
             this.btnShowHotspots = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
+            this.btnGraphReport = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewReports)).BeginInit();
             this.SuspendLayout();
             // 
@@ -52,7 +53,7 @@
             this.dataGridViewReports.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewReports.Location = new System.Drawing.Point(12, 163);
             this.dataGridViewReports.Name = "dataGridViewReports";
-            this.dataGridViewReports.Size = new System.Drawing.Size(407, 226);
+            this.dataGridViewReports.Size = new System.Drawing.Size(420, 226);
             this.dataGridViewReports.TabIndex = 0;
             this.dataGridViewReports.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridReports_CellContentClick);
             // 
@@ -179,7 +180,7 @@
             // btnShowMyPriority
             // 
             this.btnShowMyPriority.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnShowMyPriority.Location = new System.Drawing.Point(234, 474);
+            this.btnShowMyPriority.Location = new System.Drawing.Point(238, 474);
             this.btnShowMyPriority.Name = "btnShowMyPriority";
             this.btnShowMyPriority.Size = new System.Drawing.Size(108, 23);
             this.btnShowMyPriority.TabIndex = 25;
@@ -217,11 +218,22 @@
             this.label7.TabIndex = 28;
             this.label7.Text = "Exta Tools:";
             // 
+            // btnGraphReport
+            // 
+            this.btnGraphReport.Location = new System.Drawing.Point(361, 474);
+            this.btnGraphReport.Name = "btnGraphReport";
+            this.btnGraphReport.Size = new System.Drawing.Size(71, 23);
+            this.btnGraphReport.TabIndex = 29;
+            this.btnGraphReport.Text = "Probablility";
+            this.btnGraphReport.UseVisualStyleBackColor = true;
+            this.btnGraphReport.Click += new System.EventHandler(this.btnGraphReport_Click);
+            // 
             // ViewReportsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(431, 509);
+            this.ClientSize = new System.Drawing.Size(444, 509);
+            this.Controls.Add(this.btnGraphReport);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.btnShowHotspots);
@@ -265,5 +277,6 @@
         private System.Windows.Forms.Button btnShowHotspots;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button btnGraphReport;
     }
 }

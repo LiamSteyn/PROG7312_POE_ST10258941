@@ -41,7 +41,49 @@ namespace IssueReportSystem.Services
         // Instance of the AdvancedDataStructureService to handle BST and Min-Heap operations.
         private static AdvancedDataStructureService advancedService = new AdvancedDataStructureService();
 
+        private static ProvinceReportProbabilityService probabilityService = new ProvinceReportProbabilityService();
 
+
+        /// <summary>
+        /// Calculates the probability of future reports in each province using graph-based analysis.
+        /// This method builds a graph where provinces are nodes and edges represent similarity in report patterns.
+        /// </summary>
+        /// <returns>Dictionary with province names as keys and probability percentages (0-100) as values</returns>
+        public static Dictionary<string, double> CalculateFutureReportProbabilities()
+        {
+            // Build the graph from all current reports
+            probabilityService.BuildGraphFromReports(reports);
+
+            // Calculate probabilities using graph traversal and analysis
+            return probabilityService.CalculateReportProbabilities();
+        }
+
+        /// <summary>
+        /// Gets detailed analysis for each province including probability metrics and graph relationships.
+        /// </summary>
+        /// <returns>Dictionary with province names as keys and detailed analysis objects as values</returns>
+        public static Dictionary<string, ProvinceReportProbabilityService.ProvinceAnalysis> GetDetailedProvinceProbabilityAnalysis()
+        {
+            // Build the graph from all current reports
+            probabilityService.BuildGraphFromReports(reports);
+
+            // Get comprehensive analysis including graph connections
+            return probabilityService.GetDetailedAnalysis();
+        }
+
+        /// <summary>
+        /// Gets a ranked list of provinces by their probability of receiving future reports.
+        /// </summary>
+        /// <returns>List of tuples containing province name and probability, ordered by probability descending</returns>
+        public static List<(string Province, double Probability)> GetProvincesByReportProbabilityRanking()
+        {
+            var probabilities = CalculateFutureReportProbabilities();
+
+            return probabilities
+                .OrderByDescending(kv => kv.Value)
+                .Select(kv => (kv.Key, kv.Value))
+                .ToList();
+        }
 
         // Public static method to add a new Report to all relevant data structures.
         public static void AddReport(Report report)

@@ -75,6 +75,7 @@
       <DependentUpon>ReportIssue.cs</DependentUpon>
     </Compile>
     <Compile Include="Services\AdvancedDataStructureService.cs" />
+    <Compile Include="Services\ProvinceReportProbabilityService.cs" />
     <Compile Include="Services\ReportService.cs" />
     <Compile Include="StatusTrackerForm.cs">
       <SubType>Form</SubType>
