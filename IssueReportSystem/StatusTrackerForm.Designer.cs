@@ -37,6 +37,7 @@
             this.userIdTextBox = new System.Windows.Forms.TextBox();
             this.statusFilterDropdown = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewStatus)).BeginInit();
             this.SuspendLayout();
@@ -44,27 +45,29 @@
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 3;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 83.49056F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 83.49057F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.50943F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 461F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 462F));
+            this.tableLayoutPanel1.Controls.Add(this.label3, 0, 5);
             this.tableLayoutPanel1.Controls.Add(this.btnBack, 2, 0);
-            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 3);
-            this.tableLayoutPanel1.Controls.Add(this.dataGridViewStatus, 0, 5);
+            this.tableLayoutPanel1.Controls.Add(this.dataGridViewStatus, 0, 6);
             this.tableLayoutPanel1.Controls.Add(this.label4, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.label2, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.userIdTextBox, 0, 2);
-            this.tableLayoutPanel1.Controls.Add(this.statusFilterDropdown, 0, 4);
             this.tableLayoutPanel1.Controls.Add(this.button1, 1, 2);
+            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.statusFilterDropdown, 0, 4);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 6;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 70.93023F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 29.06977F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 268F));
+            this.tableLayoutPanel1.RowCount = 7;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 66.29214F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.70787F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 38F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 238F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(800, 450);
             this.tableLayoutPanel1.TabIndex = 0;
@@ -78,7 +81,7 @@
             this.btnBack.Location = new System.Drawing.Point(730, 3);
             this.btnBack.Margin = new System.Windows.Forms.Padding(3, 3, 20, 3);
             this.btnBack.Name = "btnBack";
-            this.btnBack.Size = new System.Drawing.Size(50, 55);
+            this.btnBack.Size = new System.Drawing.Size(50, 52);
             this.btnBack.TabIndex = 23;
             this.btnBack.Text = "Home";
             this.btnBack.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -89,7 +92,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 10.25F);
-            this.label1.Location = new System.Drawing.Point(3, 115);
+            this.label1.Location = new System.Drawing.Point(3, 113);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(84, 19);
             this.label1.TabIndex = 22;
@@ -99,7 +102,7 @@
             // 
             this.dataGridViewStatus.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.tableLayoutPanel1.SetColumnSpan(this.dataGridViewStatus, 3);
-            this.dataGridViewStatus.Location = new System.Drawing.Point(3, 184);
+            this.dataGridViewStatus.Location = new System.Drawing.Point(3, 214);
             this.dataGridViewStatus.Name = "dataGridViewStatus";
             this.dataGridViewStatus.Size = new System.Drawing.Size(794, 168);
             this.dataGridViewStatus.TabIndex = 21;
@@ -119,7 +122,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe UI", 10.25F);
-            this.label2.Location = new System.Drawing.Point(3, 61);
+            this.label2.Location = new System.Drawing.Point(3, 58);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(93, 19);
             this.label2.TabIndex = 9;
@@ -135,11 +138,11 @@
             this.userIdTextBox.BackColor = System.Drawing.SystemColors.Window;
             this.userIdTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.userIdTextBox.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.userIdTextBox.Location = new System.Drawing.Point(6, 86);
+            this.userIdTextBox.Location = new System.Drawing.Point(6, 87);
             this.userIdTextBox.Margin = new System.Windows.Forms.Padding(6, 0, 6, 6);
             this.userIdTextBox.Multiline = true;
             this.userIdTextBox.Name = "userIdTextBox";
-            this.userIdTextBox.Size = new System.Drawing.Size(271, 23);
+            this.userIdTextBox.Size = new System.Drawing.Size(270, 20);
             this.userIdTextBox.TabIndex = 19;
             this.userIdTextBox.Tag = "";
             this.userIdTextBox.TextChanged += new System.EventHandler(this.userIdTextBox_TextChanged);
@@ -149,7 +152,7 @@
             this.tableLayoutPanel1.SetColumnSpan(this.statusFilterDropdown, 2);
             this.statusFilterDropdown.Font = new System.Drawing.Font("Segoe UI", 8.25F);
             this.statusFilterDropdown.FormattingEnabled = true;
-            this.statusFilterDropdown.Location = new System.Drawing.Point(6, 150);
+            this.statusFilterDropdown.Location = new System.Drawing.Point(6, 145);
             this.statusFilterDropdown.Margin = new System.Windows.Forms.Padding(6);
             this.statusFilterDropdown.Name = "statusFilterDropdown";
             this.statusFilterDropdown.Size = new System.Drawing.Size(121, 21);
@@ -158,13 +161,23 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(286, 89);
+            this.button1.Location = new System.Drawing.Point(285, 90);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(49, 23);
+            this.button1.Size = new System.Drawing.Size(49, 20);
             this.button1.TabIndex = 11;
             this.button1.Text = "Search";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Segoe UI", 14.25F);
+            this.label3.Location = new System.Drawing.Point(3, 177);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(111, 25);
+            this.label3.TabIndex = 24;
+            this.label3.Text = "Report Data";
             // 
             // StatusTrackerForm
             // 
@@ -192,5 +205,6 @@
         private System.Windows.Forms.DataGridView dataGridViewStatus;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnBack;
+        private System.Windows.Forms.Label label3;
     }
 }
